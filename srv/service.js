@@ -1,41 +1,88 @@
 require('dotenv').config();
 
 const cds = require('@sap/cds');
+const httpclient = require('@sap-cloud-sdk/http-client');
 
 module.exports = cds.service.impl(async (srv) => {
-    const { Expenses, Categories, Financings, EnvData } = srv.entities;
+    try {
+        const { Expenses, Categories, Financings, EnvData } = srv.entities;
 
-    // Statische metadata voor elk type entiteit
-    const expenseMetadata = [
-        { projectId: 'EX123', projectName: 'Project X', projectManager: 'John Doe', startDate: '2023-01-01', categoryId: 'CAT1', financingId: 'FIN1', durationMonths: 12, submittedBy: 'Alice', submittedOn: '2023-01-02', status: 'Active' }
-    ];
+        // Functie om gegevens van de OData-service op te halen via de destination
+        const getData = async (endpoint) => {
+            try {
+                const response = await httpclient.executeHttpRequest(
+                    { destinationName: 'S4HANA_DEST' },
+                    {
+                        method: 'GET',
+                        url: `/${endpoint}`,
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        params: {
+                            format: 'json',
+                        },
+                        parameterEncoder: httpclient.encodeAllParameters,
+                    }
+                );
+                return response.data.d.results;
+            } catch (error) {
+                console.error(`Error fetching data from ${endpoint}:`, error.message);
+                throw new Error(`Failed to fetch data from ${endpoint}: ${error.message}`);
+            }
+        };
 
-    const categoryMetadata = [
-        { categoryId: 'CAT1', categoryName: 'Infrastructure', categoryDescription: 'Infrastructure Projects' }
-    ];
+        // Haal de gegevens op voor elke entity
+        const expenseData = await getData('ExpenseSet');
+        const categoryData = await getData('CategorySet');
+        const financingData = await getData('FinancingSet');
+        const envData = await getData('EnvDataSet');
 
-    const financingMetadata = [
-        { financingId: 'FIN1', financingName: 'Government Grant', financingDescription: 'Government-provided funding' }
-    ];
+        // Voeg de data toe aan je CAP-entiteiten
+        srv.on('READ', 'Expenses', async () => {
+            return expenseData.map(expense => ({
+                projectId: expense.ProjectId,
+                projectName: expense.ProjectName,
+                projectManager: expense.ProjectManager,
+                startDate: expense.StartDate,
+                categoryId: expense.CategoryId,
+                financingId: expense.FinancingId,
+                durationMonths: expense.DurationMonths,
+                submittedBy: expense.SubmittedBy,
+                submittedOn: expense.SubmittedOn,
+                status: expense.Status,
+            }));
+        });
 
-    const envDataMetadata = [
-        { projectID: 'EX123', greenEnergyOutput: 1000, co2Current: 500, co2PostCompletion: 300, waterUsageCurrent: 2000, waterUsagePostCompletion: 1500, greenPayback: 5, comments: 'Green project' }
-    ];
+        srv.on('READ', 'Categories', async () => {
+            return categoryData.map(category => ({
+                categoryId: category.CategoryId,
+                categoryName: category.CategoryName,
+                categoryDescription: category.CategoryDescription,
+            }));
+        });
 
-    // Return statische metadata in plaats van echte data
-    srv.on('READ', 'Expenses', async () => {
-        return expenseMetadata;
-    });
+        srv.on('READ', 'Financings', async () => {
+            return financingData.map(financing => ({
+                financingId: financing.FinancingId,
+                financingName: financing.FinancingName,
+                financingDescription: financing.FinancingDescription,
+            }));
+        });
 
-    srv.on('READ', 'Categories', async () => {
-        return categoryMetadata;
-    });
-
-    srv.on('READ', 'Financings', async () => {
-        return financingMetadata;
-    });
-
-    srv.on('READ', 'EnvData', async () => {
-        return envDataMetadata;
-    });
+        srv.on('READ', 'EnvData', async () => {
+            return envData.map(data => ({
+                projectID: data.ProjectId,
+                greenEnergyOutput: data.GreenEnergyOutput,
+                co2Current: data.Co2Current,
+                co2PostCompletion: data.Co2PostCompletion,
+                waterUsageCurrent: data.WaterUsageCurrent,
+                waterUsagePostCompletion: data.WaterUsagePostCompletion,
+                greenPayback: data.GreenPayback,
+                comments: data.Comments,
+            }));
+        });
+    } catch (err) {
+        console.error('Global service implementation error:', err);
+        throw new Error('Service initialization failed.');
+    }
 });

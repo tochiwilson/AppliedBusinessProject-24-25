@@ -11,7 +11,7 @@ build-parameters:
       commands:
         - npm install
         - npx cds build --production
-        - mkdir -p resources 
+        - mkdir -p resources
 modules:
   - name: expense-app-srv
     type: nodejs
@@ -62,8 +62,7 @@ modules:
       commands:
         - npm install
         - npm run build
-      supported-platforms:
-        []
+      supported-platforms: []
 
   - name: expense-app-destinations
     type: com.sap.application.content
@@ -98,8 +97,8 @@ resources:
     type: com.sap.xs.hdi-container
     parameters:
       config:
-        schema: PROSPECT
-        xsappname: erp_applications_prospect
+        schema: EXPENSE-APP-DB-SCHEMA
+        xsappname: expense-app
       service: hana
       service-plan: hdi-shared
   - name: expense-app-destination
@@ -113,9 +112,9 @@ resources:
           instance:
             existing_destinations_policy: update
             destinations:
-              - Name: expense-app-srv-api
-                URL: ~{srv-api/srv-url}
-                Authentication: NoAuthentication
+              - Name: S4HANA_DEST
+                URL: https://a03z.ucc.ovgu.de/sap/opu/odata/sap/ZSD_38_GW_EXPENSES_SRV
+                Authentication: BasicAuthentication
                 Type: HTTP
                 ProxyType: Internet
                 HTML5.ForwardAuthToken: true

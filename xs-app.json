@@ -1,0 +1,10 @@
+{
+  "routes": [
+    {
+      "source": "^/odata/(.*)$",
+      "target": "/odata/$1",
+      "destination": "S4HANA_DEST",
+      "authenticationType": "BasicAuthentication"
+    }
+  ]
+}
