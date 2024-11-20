@@ -1,0 +1,35 @@
+{
+    "xsappname": "expense-app-${space}",
+    "tenant-mode": "dedicated",
+    "scopes": [
+      {
+        "name": "$XSAPPNAME.Viewer",
+        "description": "Access the application as a Viewer"
+      },
+      {
+        "name": "$XSAPPNAME.Admin",
+        "description": "Access the application as an Admin"
+      }
+    ],
+    "role-templates": [
+      {
+        "name": "Viewer",
+        "description": "Role to view the application",
+        "scope-references": [
+          "$XSAPPNAME.Viewer"
+        ]
+      },
+      {
+        "name": "Admin",
+        "description": "Role to administer the application",
+        "scope-references": [
+          "$XSAPPNAME.Admin"
+        ]
+      }
+    ],
+    "authorities": [
+      "$XSAPPNAME.Viewer",
+      "$XSAPPNAME.Admin"
+    ]
+  }
+  
