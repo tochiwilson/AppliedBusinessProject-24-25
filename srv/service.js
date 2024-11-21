@@ -50,6 +50,11 @@ module.exports = cds.service.impl(async (srv) => {
                 submittedBy: expense.SubmittedBy,
                 submittedOn: expense.SubmittedOn,
                 status: expense.Status,
+                
+                // Associaties toevoegen
+                category: categoryData.find(category => category.CategoryId === expense.CategoryId),
+                financing: financingData.find(financing => financing.FinancingId === expense.FinancingId),
+                envData: envData.find(data => data.ProjectId === expense.ProjectId),
             }));
         });
 
@@ -71,7 +76,7 @@ module.exports = cds.service.impl(async (srv) => {
 
         srv.on('READ', 'EnvData', async () => {
             return envData.map(data => ({
-                projectID: data.ProjectId,
+                projectId: data.ProjectId,
                 greenEnergyOutput: data.GreenEnergyOutput,
                 co2Current: data.Co2Current,
                 co2PostCompletion: data.Co2PostCompletion,
