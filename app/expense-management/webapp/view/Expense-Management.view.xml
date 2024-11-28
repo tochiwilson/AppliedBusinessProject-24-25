@@ -1,0 +1,133 @@
+<mvc:View controllerName="expensemanagement.controller.Expense-Management"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:filterbar="sap.ui.comp.filterbar"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.f">
+    
+    <f:DynamicPage id="dynamicPageId">
+
+      <f:title>
+        <f:DynamicPageTitle>
+          <f:heading>
+            <Title text="Expense List"/>
+          </f:heading>
+        </f:DynamicPageTitle>
+      </f:title>
+
+      <f:header>
+        <f:DynamicPageHeader id="id.DynamicPageHeader">
+          <f:content>
+            <filterbar:FilterBar id="filterBar" useToolbar="false" search=".onSearch" showClearOnFB="true" clear="clearFilters">
+              <filterbar:filterGroupItems>
+                <!-- Filter for Project Name -->
+                <filterbar:FilterGroupItem name="ProjectNaam" groupName="Group1" label="Project Naam">
+                  <filterbar:control>
+                    <Input id="projectNameInput"/>
+                  </filterbar:control>
+                </filterbar:FilterGroupItem>
+
+                <!-- Filter for Status -->
+                <filterbar:FilterGroupItem name="Status" groupName="Group1" label="Status">
+                  <filterbar:control>
+                    <Select id="statusSelect">
+                      <items>
+                        <core:Item key="Approved" text="Approved"/>
+                        <core:Item key="Submitted" text="Submitted"/>
+                      </items>
+                    </Select>
+                  </filterbar:control>
+                </filterbar:FilterGroupItem>
+
+                <!-- Filter for Financing Type -->
+                <filterbar:FilterGroupItem name="FinancingType" groupName="Group1" label="Financing Type">
+                  <filterbar:control>
+                    <Select id="financingTypeSelect" items="{
+                      path: '/FinancingTypes', templateShareable: false }">
+                      <core:Item key="{FinancingTypeId}" text="{FinancingTypeName}" />
+                    </Select>
+
+                  </filterbar:control>
+                </filterbar:FilterGroupItem>
+
+                <!-- Filter for Date -->
+                <filterbar:FilterGroupItem name="Startdatum" groupName="Group1" label="Startdatum">
+                  <filterbar:control>
+                    <DatePicker id="startDatePicker"/>
+                  </filterbar:control>
+                </filterbar:FilterGroupItem>
+              </filterbar:filterGroupItems>
+            </filterbar:FilterBar>
+          </f:content>
+        </f:DynamicPageHeader>
+      </f:header>
+
+      <f:content>
+        <Panel id="idExpensesPanel"
+              class="sapUiResponsiveMargin"
+              backgroundDesign="Transparent">
+
+          <Table id="expensesTable" items="{path:'/Expenses'}">
+            <columns>
+                <Column>
+                    <Text text="Project Name"/>
+                </Column>
+                <Column>
+                    <Text text="Project Manager"/>
+                </Column>
+                <Column>
+                    <Text text="Status"/>
+                </Column>
+                <Column >
+                    <Text text="Amount"></Text>
+                </Column>
+                <Column>
+                    <Text text="Start Date"/>
+                </Column>
+                <Column>
+                    <Text text="Category"/>
+                </Column>
+                <Column>
+                    <Text text="Financing Type"/>
+                </Column>
+                <Column>
+                    <Text text="Green Energy Output"/>
+                </Column>
+                <Column>
+                    <Text text="CO2 Current"/>
+                </Column>
+                <Column>
+                    <Text text="Water Usage Current"/>
+                </Column>
+                <Column >
+                  <Text text="Comments"/>
+                </Column>
+            </columns>
+
+            <items>
+                <ColumnListItem type="Active">
+                    <cells>
+                        <Text text="{projectName}"/>
+                        <Text text="{projectManager}"/>
+                        <Text text="{status}"/>
+                        <Text text="€{path:'amount', type: 'sap.ui.model.type.Float', formatOptions: {style: 'currency', currency: 'EUR'}}"/>
+                        <Text text="{path: 'startDate'}"/>
+                        
+                        <Text text="{path:'category/CategoryName', type: 'sap.ui.model.type.String' }"/>
+                        <Text text="{path:'financing/FinancingName', type: 'sap.ui.model.type.String' }"/>
+                        <Text text="... {path:'envData/GreenEnergyOutput', type: 'sap.ui.model.type.Float' }  "/>
+                        <Text text="... {path:'envData/Co2Current', type: 'sap.ui.model.type.Float' }  "/>
+                        <Text text="... {path:'envData/WaterUsageCurrent', type: 'sap.ui.model.type.Float' }  "/>
+                        <Text text="{path: 'envData/Comments', type: 'sap.ui.model.type.String'}"/>
+
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+        </Panel>
+      </f:content>
+
+  </f:DynamicPage>
+
+</mvc:View>
