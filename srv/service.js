@@ -40,9 +40,11 @@ module.exports = cds.service.impl(async (srv) => {
         // Voeg de data toe aan je CAP-entiteiten
         srv.on('READ', 'Expenses', async () => {
             return expenseData.map(expense => ({
+                expenseId: expense.ExpenseId,
                 projectId: expense.ProjectId,
                 projectName: expense.ProjectName,
                 projectManager: expense.ProjectManager,
+                amount: expense.Amount,
                 startDate: expense.StartDate,
                 categoryId: expense.CategoryId,
                 financingId: expense.FinancingId,

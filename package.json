@@ -21,12 +21,13 @@
   "scripts": {
     "start": "cds-serve",
     "watch-expense": "cds watch --open expense/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-expense-create": "cds watch --open expense-create/webapp/index.html?sap-ui-xx-viewCache=false",
-    "watch-finance-type_management": "cds watch --open finance-type_management/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-expense-create": "cds watch --open expense-create/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "sapux": [
     "app/expense",
-    "app/finance-type_management"
+    "app/expense-management",
+        "app/expsense-management",
+        "app/finance-type_management"
   ],
   "cds": {
     "requires": {
