@@ -26,8 +26,9 @@
   "sapux": [
     "app/expense",
     "app/expense-management",
-        "app/expsense-management",
-        "app/finance-type_management"
+    "app/expsense-management",
+    "app/finance-type_management",
+    "app/expense-management"
   ],
   "cds": {
     "requires": {
