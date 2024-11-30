@@ -68,7 +68,7 @@
               class="sapUiResponsiveMargin"
               backgroundDesign="Transparent">
 
-          <Table id="expensesTable" items="{path:'/Expenses'}">
+          <Table id="expensesTable" items="{path: '/Expenses', parameters: {expand: 'category,financing,envData', select: 'amount,expenseId,projectManager,projectName,startDate,status,category/categoryName,financing/financingName,envData/co2Current,envData/comments'}}">
             <columns>
                 <Column>
                     <Text text="Project Name"/>
@@ -111,15 +111,15 @@
                         <Text text="{projectName}"/>
                         <Text text="{projectManager}"/>
                         <Text text="{status}"/>
-                        <Text text="€{path:'amount', type: 'sap.ui.model.type.Float', formatOptions: {style: 'currency', currency: 'EUR'}}"/>
+                        <Text text="€{path:'amount', type: 'sap.ui.model.type.Float'}"/>
                         <Text text="{path: 'startDate'}"/>
                         
-                        <Text text="{path:'category/CategoryName', type: 'sap.ui.model.type.String' }"/>
-                        <Text text="{path:'financing/FinancingName', type: 'sap.ui.model.type.String' }"/>
-                        <Text text="... {path:'envData/GreenEnergyOutput', type: 'sap.ui.model.type.Float' }  "/>
-                        <Text text="... {path:'envData/Co2Current', type: 'sap.ui.model.type.Float' }  "/>
-                        <Text text="... {path:'envData/WaterUsageCurrent', type: 'sap.ui.model.type.Float' }  "/>
-                        <Text text="{path: 'envData/Comments', type: 'sap.ui.model.type.String'}"/>
+                        <Text text="{path:'category/categoryName', type: 'sap.ui.model.type.String' }"/>
+                        <Text text="{path:'financing/financingName', type: 'sap.ui.model.type.String' }"/>
+                        <Text text="{path:'envData/greenEnergyOutput', type: 'sap.ui.model.type.Float' } "/>
+                        <Text text="{path:'envData/co2Current', type: 'sap.ui.model.type.Float' }"/>
+                        <Text text="{path:'envData/waterUsageCurrent', type: 'sap.ui.model.type.Float' }"/>
+                        <Text text="{path:'envData/comments', type: 'sap.ui.model.type.String'}"/>
 
                     </cells>
                 </ColumnListItem>
