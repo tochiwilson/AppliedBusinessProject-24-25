@@ -79,6 +79,7 @@ module.exports = cds.service.impl(async (srv) => {
         srv.on('READ', 'EnvData', async () => {
             return envData.map(data => ({
                 projectId: data.ProjectId,
+                expenseId: data.ExpenseId,
                 greenEnergyOutput: data.GreenEnergyOutput,
                 co2Current: data.Co2Current,
                 co2PostCompletion: data.Co2PostCompletion,

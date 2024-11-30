@@ -16,26 +16,9 @@ service ExpenseService {
             submittedBy,
             submittedOn,
             status,
-            category {
-                categoryId,
-                categoryName,
-                categoryDescription,
-            },
-            financing {
-                financingId,
-                financingName,
-                financingDescription,
-            },
-            envData {
-                projectId,
-                greenEnergyOutput,
-                co2Current,
-                co2PostCompletion,
-                waterUsageCurrent,
-                waterUsagePostCompletion,
-                greenPayback,
-                comments,
-            }
+            category,
+            financing,
+            envData
         }
 
     entity Categories as projection on app.Categories;

@@ -43,6 +43,7 @@ context ExpenseApp {
     // Entity for Environmental Data (EnvData)
     entity EnvData : managed {
         key projectId                : Integer;
+            expenseId                : Integer;
             greenEnergyOutput        : Decimal(4, 0);
             co2Current               : String(100);
             co2PostCompletion        : String(100);
