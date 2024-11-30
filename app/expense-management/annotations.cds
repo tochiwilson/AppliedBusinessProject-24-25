@@ -110,47 +110,47 @@ annotate service.Expenses with @(
     UI.LineItem                  : [
         {
             $Type: 'UI.DataField',
-            Label: 'Project Name',
+            Label: '{i18n>ProjectName}',
             Value: projectName,
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Status',
+            Label: '{i18n>Status}',
             Value: status,
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Start Date',
+            Label: '{i18n>StartDate}',
             Value: startDate,
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Project Manager',
+            Label: '{i18n>ProjectManager}',
             Value: projectManager,
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Category',
+            Label: '{i18n>Category}',
             Value: category.categoryName,
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Financing',
+            Label: '{i18n>Financing}',
             Value: financing.financingName,
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Green Energy Output',
+            Label: '{i18n>GreenEnergyOutput}',
             Value: envData.greenEnergyOutput,
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Green Payback',
+            Label: '{i18n>GreenPayback}',
             Value: envData.greenPayback,
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Comments',
+            Label: '{i18n>Comments}',
             Value: envData.comments,
         }
     ],
@@ -158,198 +158,13 @@ annotate service.Expenses with @(
         $Type         : 'UI.HeaderInfoType',
         TypeName      : 'Expense',
         TypeNamePlural: 'Expenses',
-        Title         : {
-            $Type: 'UI.DataField',
-            Value: projectName,
-        },
         Description   : {
             $Type: 'UI.DataField',
             Value: projectManager,
         },
+        Title         : {
+            $Type: 'UI.DataField',
+            Value: projectName,
+        },
     },
-);
-
-annotate service.Categories with @(
-    UI.FieldGroup #GeneratedGroup: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Label: 'Category ID',
-                Value: categoryId,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Category Name',
-                Value: categoryName,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Description',
-                Value: categoryDescription,
-            },
-        ],
-    },
-
-    UI.LineItem                  : [
-        {
-            $Type: 'UI.DataField',
-            Label: 'Category ID',
-            Value: categoryId,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Category Name',
-            Value: categoryName,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Description',
-            Value: categoryDescription,
-        },
-    ]
-);
-
-annotate service.Financings with @(
-
-    UI.FieldGroup #GeneratedGroup: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Label: 'Financing ID',
-                Value: financingId,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Financing Name',
-                Value: financingName,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Description',
-                Value: financingDescription,
-            },
-        ],
-    },
-
-    UI.LineItem                  : [
-        {
-            $Type: 'UI.DataField',
-            Label: 'Financing ID',
-            Value: financingId,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Financing Name',
-            Value: financingName,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Description',
-            Value: financingDescription,
-        },
-    ]
-);
-
-annotate service.EnvData with @(
-
-    UI.FieldGroup #GeneratedGroup: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Label: 'Project ID',
-                Value: projectId,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Expense ID',
-                Value: expenseId,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Green Energy Output',
-                Value: greenEnergyOutput,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'CO2 Current',
-                Value: co2Current,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'CO2 Post Completion',
-                Value: co2PostCompletion,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Water Usage Current',
-                Value: waterUsageCurrent,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Water Usage Post Completion',
-                Value: waterUsagePostCompletion,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Green Payback',
-                Value: greenPayback,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Comments',
-                Value: comments,
-            },
-        ],
-    },
-
-    UI.LineItem                  : [
-        {
-            $Type: 'UI.DataField',
-            Label: 'Project ID',
-            Value: projectId,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Expense ID',
-            Value: expenseId,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Green Energy Output',
-            Value: greenEnergyOutput,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'CO2 Current',
-            Value: co2Current,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'CO2 Post Completion',
-            Value: co2PostCompletion,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Water Usage Current',
-            Value: waterUsageCurrent,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Water Usage Post Completion',
-            Value: waterUsagePostCompletion,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Green Payback',
-            Value: greenPayback,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Comments',
-            Value: comments,
-        },
-    ]
 );
