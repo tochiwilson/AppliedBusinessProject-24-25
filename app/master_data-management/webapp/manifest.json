@@ -1,7 +1,7 @@
 {
-  "_version": "1.65.0",
+  "_version": "1.59.0",
   "sap.app": {
-    "id": "financetypemanagement",
+    "id": "masterdatamanagement",
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
@@ -12,8 +12,8 @@
     "resources": "resources.json",
     "sourceTemplate": {
       "id": "@sap/generator-fiori:lrop",
-      "version": "1.15.5",
-      "toolsId": "704b484c-70cb-4d30-8408-3487efdc6be0"
+      "version": "1.13.3",
+      "toolsId": "6fd4d54e-85c1-4e9c-8066-be8817b6938d"
     },
     "dataSources": {
       "mainService": {
@@ -45,10 +45,11 @@
   "sap.ui5": {
     "flexEnabled": true,
     "dependencies": {
-      "minUI5Version": "1.130.2",
+      "minUI5Version": "1.120.21",
       "libs": {
         "sap.m": {},
         "sap.ui.core": {},
+        "sap.ushell": {},
         "sap.fe.templates": {}
       }
     },
@@ -60,13 +61,14 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "financetypemanagement.i18n.i18n"
+          "bundleName": "masterdatamanagement.i18n.i18n"
         }
       },
       "": {
         "dataSource": "mainService",
         "preload": true,
         "settings": {
+          "synchronizationMode": "None",
           "operationMode": "Server",
           "autoExpandSelect": true,
           "earlyRequests": true

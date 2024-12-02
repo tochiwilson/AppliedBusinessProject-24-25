@@ -168,3 +168,94 @@ annotate service.Expenses with @(
         },
     },
 );
+
+annotate service.Expenses with {
+    financing @Common.ValueList: {
+        $Type         : 'Common.ValueListType',
+        CollectionPath: 'Financings',
+        Parameters    : [
+            {
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: 'financing_financingId',
+                ValueListProperty: 'financingId',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'financingName',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'financingDescription',
+            }
+        ],
+    }
+}
+
+annotate service.Expenses with {
+    category @Common.ValueList: {
+        $Type         : 'Common.ValueListType',
+        CollectionPath: 'Categories',
+        Parameters    : [
+            {
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: 'category_categoryId',
+                ValueListProperty: 'categoryId',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'categoryName',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'categoryDescription',
+            }
+        ],
+    }
+}
+
+annotate service.Expenses with {
+    envData @Common.ValueList: {
+        $Type         : 'Common.ValueListType',
+        CollectionPath: 'EnvData',
+        Parameters    : [
+            {
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: 'envData_projectId',
+                ValueListProperty: 'projectId',
+            },
+            {
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: 'expenseId',
+                ValueListProperty: 'expenseId',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'greenEnergyOutput',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'co2Current',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'co2PostCompletion',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'waterUsageCurrent',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'waterUsagePostCompletion',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'greenPayback',
+            },
+            {
+                $Type            : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty: 'comments',
+            }
+        ],
+    }
+}

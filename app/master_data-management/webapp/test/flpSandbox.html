@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html>
 <!-- Copyright (c) 2015 SAP AG, All Rights Reserved -->
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,17 +37,16 @@
                 fiori2: {
                     componentData: {
                         config: {
-                            search: "hidden",
-                            enableSearch: false
+                            search: "hidden"
                         }
                     }
                 }
             },
             applications: {
-                "financetypemanagement-tile": {
-                    title: "Financing Management App",
-                    description: "Master data management app voor financing types",
-                    additionalInformation: "SAPUI5.Component=financetypemanagement",
+                "masterdatamanagement-tile": {
+                    title: "Master Data Management",
+                    description: "An SAP Fiori application.",
+                    additionalInformation: "SAPUI5.Component=masterdatamanagement",
                     applicationType: "URL",
                     url: "../"
                 }
@@ -55,25 +54,23 @@
         };
     </script>
 
-    <script src="https://sapui5.hana.ondemand.com/1.130.2/test-resources/sap/ushell/bootstrap/sandbox.js" id="sap-ushell-bootstrap"></script>
-    <!-- Bootstrap the UI5 core library. 'data-sap-ui-frameOptions="allow"'' is a NON-SECURE setting for test environments -->
+    <script src="https://sapui5.hana.ondemand.com/1.120.21/test-resources/sap/ushell/bootstrap/sandbox.js" id="sap-ushell-bootstrap"></script>
+    <!-- Bootstrap the UI5 core library -->
     <script id="sap-ui-bootstrap"
-        src="https://sapui5.hana.ondemand.com/1.130.2/resources/sap-ui-core.js"
+        src="https://sapui5.hana.ondemand.com/1.120.21/resources/sap-ui-core.js"
         data-sap-ui-libs=""
         data-sap-ui-async="true"
         data-sap-ui-preload="async"
         data-sap-ui-theme="sap_horizon"
         data-sap-ui-compatVersion="edge"
         data-sap-ui-language="en"
-        data-sap-ui-resourceroots='{"financetypemanagement": "../"}'
-        data-sap-ui-frameOptions="allow"
-        data-sap-ui-flexibilityServices='[{"connector": "LocalStorageConnector"}]'>
+        data-sap-ui-resourceroots='{"masterdatamanagement": "../"}'
+        data-sap-ui-frameOptions="allow"> // NON-SECURE setting for testing environment
     </script>
-    <script>
-        sap.ui.getCore().attachInit(function () {
-            sap.ushell.Container.createRenderer().placeAt("content");
-        });
-    </script>
+
+    <script type="text/javascript">
+        sap.ui.getCore().attachInit(() => sap.ushell.Container.createRenderer().placeAt('content'));
+    </script>     
 </head>
 
 <!-- UI Content -->

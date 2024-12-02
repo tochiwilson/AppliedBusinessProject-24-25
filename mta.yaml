@@ -105,6 +105,30 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []
+- name: expense-app-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: expense-app-html5-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - masterdatamanagement.zip
+      name: masterdatamanagement
+      target-path: resources/
+- name: masterdatamanagement
+  type: html5
+  path: app/master_data-management
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
 resources:
 - name: expense-app-db
   type: com.sap.xs.hdi-container
@@ -118,7 +142,7 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     config:
-      HTML5Runtime_enabled: true
+      HTML5Runtime_enabled: false
       init_data:
         instance:
           destinations:

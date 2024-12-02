@@ -1,15 +1,15 @@
 sap.ui.require(
     [
         'sap/fe/test/JourneyRunner',
-        'financetypemanagement/test/integration/FirstJourney',
-		'financetypemanagement/test/integration/pages/ExpensesList',
-		'financetypemanagement/test/integration/pages/ExpensesObjectPage'
+        'masterdatamanagement/test/integration/FirstJourney',
+		'masterdatamanagement/test/integration/pages/ExpensesList',
+		'masterdatamanagement/test/integration/pages/ExpensesObjectPage'
     ],
     function(JourneyRunner, opaJourney, ExpensesList, ExpensesObjectPage) {
         'use strict';
         var JourneyRunner = new JourneyRunner({
             // start index.html in web folder
-            launchUrl: sap.ui.require.toUrl('financetypemanagement') + '/index.html'
+            launchUrl: sap.ui.require.toUrl('masterdatamanagement') + '/index.html'
         });
 
        
