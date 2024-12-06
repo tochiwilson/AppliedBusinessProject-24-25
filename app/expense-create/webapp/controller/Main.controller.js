@@ -12,13 +12,13 @@ function (Controller) {
             this.getOwnerComponent().getModel("settings").setProperty("/CountryList", aCountry)
         },
             // Initialization code, if any
+            onCreateExpensePress: function () {
+                // Navigate to "createExpense" route
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.navTo("createExpense");
+            }
         },
 
-        onCreateExpensePress: function () {
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("createExpense");
-        },
 
-    });
-    
+    );
 });
