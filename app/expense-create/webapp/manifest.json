@@ -61,14 +61,8 @@
       "libs": {
         "sap.m": {},
         "sap.ui.core": {},
-        "sap.f": {},
-        "sap.ui.comp.filterbar": {}
+        "sap.f": {}
       }
-    },
-    "minUI5Version": "1.120.21",
-    "libs": {
-        "sap.m": {},
-        "sap.ui.core": {}
     },
     "contentDensities": {
       "compact": true,
@@ -99,38 +93,37 @@
       ]
     },
     "routing": {
-        "config": {
-            "routerClass": "sap.m.routing.Router",
-            "viewType": "XML",
-            "async": true,
-            "viewPath": "expensecreate.view",
-            "controlId": "app",
-            "controlAggregation": "pages",
-            "clearControlAggregation": false
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "expensecreate.view",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "RouteMain",
+          "pattern": "",
+          "target": "TargetMain"
         },
-        "routes": [
-            {
-                "name": "RouteMain",
-                "pattern": "",
-                "target": "TargetMain"
-            },
-            {
-                "name": "createExpense",
-                "pattern": "createExpense",
-                "target": "TargetCreateExpense"
-            }
-        ],
-        "targets": {
-            "TargetMain": {
-                "viewName": "Main",
-                "viewId": "Main",
-                "viewLevel": 0
-            },
-            "TargetCreateExpense": {
-                "viewName": "CreateExpense",
-                "viewId": "CreateExpense",
-                "viewLevel": 1
-            }
+        {
+          "name": "createExpense",
+          "pattern": "createExpense",
+          "target": "TargetCreateExpense"
+        }
+      ],
+      "targets": {
+        "TargetMain": {
+          "viewName": "Main",
+          "viewId": "Main",
+          "viewLevel": 0
+        },
+        "TargetCreateExpense": {
+          "viewName": "CreateExpense",
+          "viewId": "CreateExpense",
+          "viewLevel": 1
         }
       }
     },
