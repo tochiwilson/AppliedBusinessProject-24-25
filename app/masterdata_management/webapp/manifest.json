@@ -1,7 +1,7 @@
 {
   "_version": "1.60.0",
   "sap.app": {
-    "id": "expensecreate",
+    "id": "masterdatamanagement",
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
@@ -13,7 +13,7 @@
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
       "version": "1.15.7",
-      "toolsId": "f0558e45-bdff-489f-a4ff-5ff8cde174c3"
+      "toolsId": "a124f2b1-e0e2-4cb6-8372-cae9ce4f1f85"
     },
     "dataSources": {
       "mainService": {
@@ -43,7 +43,7 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
+    "flexEnabled": false,
     "dependencies": {
       "minUI5Version": "1.120.21",
       "libs": {
@@ -59,7 +59,7 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "expensecreate.i18n.i18n"
+          "bundleName": "masterdatamanagement.i18n.i18n"
         }
       },
       "": {
@@ -87,26 +87,26 @@
         "transition": "slide",
         "type": "View",
         "viewType": "XML",
-        "path": "expensecreate.view"
+        "path": "masterdatamanagement.view"
       },
       "routes": [
         {
-          "name": "RouteExpense-create",
+          "name": "RouteFinCatManage",
           "pattern": ":?query:",
           "target": [
-            "TargetExpense-create"
+            "TargetFinCatManage"
           ]
         }
       ],
       "targets": {
-        "TargetExpense-create": {
-          "id": "Expense-create",
-          "name": "Expense-create"
+        "TargetFinCatManage": {
+          "id": "FinCatManage",
+          "name": "FinCatManage"
         }
       }
     },
     "rootView": {
-      "viewName": "expensecreate.view.App",
+      "viewName": "masterdatamanagement.view.App",
       "type": "XML",
       "id": "App"
     }

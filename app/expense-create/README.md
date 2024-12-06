@@ -1,15 +1,15 @@
 ## Application Details
 |               |
 | ------------- |
-|**Generation Date and Time**<br>Fri Nov 08 2024 09:12:50 GMT+0000 (Coordinated Universal Time)|
+|**Generation Date and Time**<br>Fri Dec 06 2024 11:11:44 GMT+0000 (Coordinated Universal Time)|
 |**App Generator**<br>@sap/generator-fiori-freestyle|
-|**App Generator Version**<br>1.15.3|
+|**App Generator Version**<br>1.15.7|
 |**Generation Platform**<br>SAP Business Application Studio|
 |**Template Used**<br>simple|
 |**Service Type**<br>Local Cap|
 |**Service URL**<br>http://localhost:4004/odata/v4/expense/|
 |**Module Name**<br>expense-create|
-|**Application Title**<br>Expense App|
+|**Application Title**<br>Expense create App|
 |**Namespace**<br>|
 |**UI5 Theme**<br>sap_horizon|
 |**UI5 Version**<br>1.120.21|
@@ -19,7 +19,7 @@
 
 ## expense-create
 
-An SAP Fiori application.
+An app for creating expenses
 
 ### Starting the generated app
 
