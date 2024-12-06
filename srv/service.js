@@ -40,9 +40,11 @@ module.exports = cds.service.impl(async (srv) => {
         // Voeg de data toe aan je CAP-entiteiten
         srv.on('READ', 'Expenses', async () => {
             return expenseData.map(expense => ({
+                expenseId: expense.ExpenseId,
                 projectId: expense.ProjectId,
                 projectName: expense.ProjectName,
                 projectManager: expense.ProjectManager,
+                amount: expense.Amount,
                 startDate: expense.StartDate,
                 categoryId: expense.CategoryId,
                 financingId: expense.FinancingId,
@@ -50,6 +52,11 @@ module.exports = cds.service.impl(async (srv) => {
                 submittedBy: expense.SubmittedBy,
                 submittedOn: expense.SubmittedOn,
                 status: expense.Status,
+                
+                // Associaties toevoegen
+                category: categoryData.find(category => category.CategoryId === expense.CategoryId),
+                financing: financingData.find(financing => financing.FinancingId === expense.FinancingId),
+                envData: envData.find(data => data.ProjectId === expense.ProjectId),
             }));
         });
 
@@ -71,7 +78,8 @@ module.exports = cds.service.impl(async (srv) => {
 
         srv.on('READ', 'EnvData', async () => {
             return envData.map(data => ({
-                projectID: data.ProjectId,
+                projectId: data.ProjectId,
+                expenseId: data.ExpenseId,
                 greenEnergyOutput: data.GreenEnergyOutput,
                 co2Current: data.Co2Current,
                 co2PostCompletion: data.Co2PostCompletion,

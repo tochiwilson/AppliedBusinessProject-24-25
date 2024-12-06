@@ -1,139 +1,185 @@
 _schema-version: 3.3.0
 ID: expense-app
+description: A simple CAP project.
 version: 1.0.0
-description: "A simple CAP project."
+modules:
+- name: expense-app-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: expense-app-db
+  - name: expense-app-destination
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    readiness-health-check-http-endpoint: /health
+    readiness-health-check-type: http
+  build-parameters:
+    builder: npm
+- name: expense-app-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: expense-app-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: expense-app-app-deployer
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: expense-app-html5-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources/
+    requires:
+    - artifacts:
+      - expense-create.zip
+      name: expenseappexpensecreate
+      target-path: resources/
+    - artifacts:
+      - expensemanagement.zip
+      name: expensemanagement
+      target-path: resources//
+    - artifacts:
+      - expsensemanagement.zip
+      name: expsensemanagement
+      target-path: resources//
+- name: expenseappexpensecreate
+  type: html5
+  path: app/expense-create
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build
+    supported-platforms: []
+- name: expense-app-destinations
+  type: com.sap.application.content
+  requires:
+  - name: expense-app-html5-repo-host
+    parameters:
+      service-key:
+        name: expense-app-html5-repo-host-key
+  - name: srv-api
+  - name: expense-app-destination
+    parameters:
+      content-target: true
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: expense-app-html5-repository
+          ServiceInstanceName: expense-app-html5-repo-host
+          ServiceKeyName: expense-app-html5-repo-host-key
+          sap.cloud.service: expenseapp.service
+        - Authentication: OAuth2UserTokenExchange
+          Name: expense-app-auth
+          ServiceInstanceName: expense-app-auth
+          ServiceKeyName: expense-app-auth-key
+          sap.cloud.service: expenseapp.service
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+- name: expensemanagement
+  type: html5
+  path: app/expense-management
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: expsensemanagement
+  type: html5
+  path: app/expsense-management
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: expense-app-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: expense-app-html5-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - masterdatamanagement.zip
+      name: masterdatamanagement
+      target-path: resources/
+- name: masterdatamanagement
+  type: html5
+  path: app/master_data-management
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: expense-app-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    config:
+      schema: EXPENSE-APP-DB-SCHEMA
+      xsappname: expense-app
+    service: hana
+    service-plan: hdi-shared
+- name: expense-app-destination
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: BasicAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: S4HANA_DEST
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://a03z.ucc.ovgu.de/sap/opu/odata/sap/ZSD_38_GW_EXPENSES_SRV
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+    service: destination
+    service-plan: lite
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+- name: expense-app-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
 parameters:
-  enable-parallel-deployments: true
   deploy_mode: html5-repo
+  enable-parallel-deployments: true
 build-parameters:
   before-all:
-    - builder: custom
-      commands:
-        - npm install
-        - npx cds build --production
-        - mkdir -p resources
-modules:
-  - name: expense-app-srv
-    type: nodejs
-    path: gen/srv
-    parameters:
-      buildpack: nodejs_buildpack
-      readiness-health-check-type: http
-      readiness-health-check-http-endpoint: /health
-    build-parameters:
-      builder: npm
-    provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
-        properties:
-          srv-url: ${default-url}
-    requires:
-      - name: expense-app-db
-      - name: expense-app-destination
-
-  - name: expense-app-db-deployer
-    type: hdb
-    path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: expense-app-db
-
-  - name: expense-app-app-deployer
-    type: com.sap.application.content
-    path: .
-    requires:
-      - name: expense-app-html5-repo-host
-        parameters:
-          content-target: true
-    build-parameters:
-      build-result: resources/
-      requires:
-        - name: expenseappexpensecreate
-          artifacts:
-            - expense-create.zip
-          target-path: resources/
-
-  - name: expenseappexpensecreate
-    type: html5
-    path: app/expense-create
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm install
-        - npm run build
-      supported-platforms: []
-
-  - name: expense-app-destinations
-    type: com.sap.application.content
-    requires:
-      - name: expense-app-html5-repo-host
-        parameters:
-          service-key:
-            name: expense-app-html5-repo-host-key
-      - name: srv-api
-      - name: expense-app-destination
-        parameters:
-          content-target: true
-    build-parameters:
-      no-source: true
-    parameters:
-      content:
-        instance:
-          existing_destinations_policy: update
-          destinations:
-            - Name: expense-app-html5-repository
-              ServiceInstanceName: expense-app-html5-repo-host
-              ServiceKeyName: expense-app-html5-repo-host-key
-              sap.cloud.service: expenseapp.service
-            - Name: expense-app-auth
-              Authentication: OAuth2UserTokenExchange
-              ServiceInstanceName: expense-app-auth
-              ServiceKeyName: expense-app-auth-key
-              sap.cloud.service: expenseapp.service
-
-resources:
-  - name: expense-app-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      config:
-        schema: EXPENSE-APP-DB-SCHEMA
-        xsappname: expense-app
-      service: hana
-      service-plan: hdi-shared
-  - name: expense-app-destination
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: destination
-      service-plan: lite
-      config:
-        HTML5Runtime_enabled: true
-        init_data:
-          instance:
-            existing_destinations_policy: update
-            destinations:
-              - Name: S4HANA_DEST
-                URL: https://a03z.ucc.ovgu.de/sap/opu/odata/sap/ZSD_38_GW_EXPENSES_SRV
-                Authentication: BasicAuthentication
-                Type: HTTP
-                ProxyType: Internet
-                HTML5.ForwardAuthToken: true
-                HTML5.DynamicDestination: true
-              - Name: ui5
-                URL: https://ui5.sap.com
-                Authentication: NoAuthentication
-                Type: HTTP
-                ProxyType: Internet
-    requires:
-      - name: srv-api
-        group: destinations
-        properties:
-          name: srv-api # must be used in xs-app.json as well
-          url: ~{srv-url}
-          forwardAuthToken: true
-
-  - name: expense-app-html5-repo-host
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: html5-apps-repo
-      service-plan: app-host
+  - builder: custom
+    commands:
+    - npm install
+    - npx cds build --production
+    - mkdir -p resources
