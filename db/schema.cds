@@ -8,7 +8,7 @@ context ExpenseApp {
             projectId      : Integer;
             projectName    : String(100);
             projectManager : String(100);
-            amount         : String(100);
+            amount         : Decimal(15, 2);
             startDate      : Date;
             categoryId     : Integer;
             financingId    : Integer;
@@ -16,9 +16,12 @@ context ExpenseApp {
             submittedBy    : String(100);
             submittedOn    : Date;
             status         : String(100);
-            category       : Association to Categories;
-            financing      : Association to Financings;
-            envData        : Association to EnvData;
+            category       : Association to Categories
+                                 on category.categoryId = $self.categoryId;
+            financing      : Association to Financings
+                                 on financing.financingId = $self.financingId;
+            envData        : Association to EnvData
+                                 on envData.projectId = $self.projectId;
     }
 
     // Entity for Financings

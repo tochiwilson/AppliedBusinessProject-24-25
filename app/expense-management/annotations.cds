@@ -6,16 +6,6 @@ annotate service.Expenses with @(
         Data : [
             {
                 $Type: 'UI.DataField',
-                Label: 'Expense ID',
-                Value: expenseId,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Project ID',
-                Value: projectId,
-            },
-            {
-                $Type: 'UI.DataField',
                 Label: 'Project Name',
                 Value: projectName,
             },
@@ -41,8 +31,18 @@ annotate service.Expenses with @(
             },
             {
                 $Type: 'UI.DataField',
+                Label: 'Category Description',
+                Value: category.categoryDescription,
+            },
+            {
+                $Type: 'UI.DataField',
                 Label: 'Financing Name',
                 Value: financing.financingName,
+            },
+            {
+                $Type: 'UI.DataField',
+                Label: 'Financing Description',
+                Value: financing.financingDescription,
             },
             {
                 $Type: 'UI.DataField',
@@ -168,94 +168,3 @@ annotate service.Expenses with @(
         },
     },
 );
-
-annotate service.Expenses with {
-    financing @Common.ValueList: {
-        $Type         : 'Common.ValueListType',
-        CollectionPath: 'Financings',
-        Parameters    : [
-            {
-                $Type            : 'Common.ValueListParameterInOut',
-                LocalDataProperty: 'financing_financingId',
-                ValueListProperty: 'financingId',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'financingName',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'financingDescription',
-            }
-        ],
-    }
-}
-
-annotate service.Expenses with {
-    category @Common.ValueList: {
-        $Type         : 'Common.ValueListType',
-        CollectionPath: 'Categories',
-        Parameters    : [
-            {
-                $Type            : 'Common.ValueListParameterInOut',
-                LocalDataProperty: 'category_categoryId',
-                ValueListProperty: 'categoryId',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'categoryName',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'categoryDescription',
-            }
-        ],
-    }
-}
-
-annotate service.Expenses with {
-    envData @Common.ValueList: {
-        $Type         : 'Common.ValueListType',
-        CollectionPath: 'EnvData',
-        Parameters    : [
-            {
-                $Type            : 'Common.ValueListParameterInOut',
-                LocalDataProperty: 'envData_projectId',
-                ValueListProperty: 'projectId',
-            },
-            {
-                $Type            : 'Common.ValueListParameterInOut',
-                LocalDataProperty: 'expenseId',
-                ValueListProperty: 'expenseId',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'greenEnergyOutput',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'co2Current',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'co2PostCompletion',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'waterUsageCurrent',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'waterUsagePostCompletion',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'greenPayback',
-            },
-            {
-                $Type            : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty: 'comments',
-            }
-        ],
-    }
-}
