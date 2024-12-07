@@ -6,68 +6,8 @@ annotate service.Expenses with @(
         Data : [
             {
                 $Type: 'UI.DataField',
-                Label: 'Project Name',
-                Value: projectName,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Project Manager',
-                Value: projectManager,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Amount',
-                Value: amount,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Start Date',
-                Value: startDate,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Category Name',
-                Value: category.categoryName,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Category Description',
-                Value: category.categoryDescription,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Financing Name',
-                Value: financing.financingName,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Financing Description',
-                Value: financing.financingDescription,
-            },
-            {
-                $Type: 'UI.DataField',
                 Label: 'Duration (Months)',
                 Value: durationMonths,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Submitted By',
-                Value: submittedBy,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Submitted On',
-                Value: submittedOn,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Status',
-                Value: status,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Green Energy Output',
-                Value: envData.greenEnergyOutput,
             },
             {
                 $Type: 'UI.DataField',
@@ -88,16 +28,6 @@ annotate service.Expenses with @(
                 $Type: 'UI.DataField',
                 Label: 'Water Usage Post Completion',
                 Value: envData.waterUsagePostCompletion,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Green Payback',
-                Value: envData.greenPayback,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Comments',
-                Value: envData.comments,
             },
         ],
     },
