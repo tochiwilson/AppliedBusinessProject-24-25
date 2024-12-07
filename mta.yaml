@@ -119,9 +119,37 @@ modules:
       - masterdatamanagement.zip
       name: masterdatamanagement
       target-path: resources/
+    - artifacts:
+      - msdmasterdatamanagement.zip
+      name: msdmasterdatamanagement
+      target-path: resources/
+    - artifacts:
+      - expensecreate.zip
+      name: expensecreate
+      target-path: resources/
 - name: masterdatamanagement
   type: html5
   path: app/master_data-management
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: msdmasterdatamanagement
+  type: html5
+  path: app/masterdata_management
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: expensecreate
+  type: html5
+  path: app/expense-create
   build-parameters:
     build-result: dist
     builder: custom
@@ -142,7 +170,7 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     config:
-      HTML5Runtime_enabled: false
+      HTML5Runtime_enabled: true
       init_data:
         instance:
           destinations:

@@ -1,7 +1,7 @@
 {
-  "name": "expense-create",
+  "name": "masterdata_management",
   "version": "0.0.1",
-  "description": "An app for creating expenses",
+  "description": "An app to manage the finance types and categories",
   "keywords": [
     "ui5",
     "openui5",

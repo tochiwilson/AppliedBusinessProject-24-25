@@ -1,10 +1,10 @@
 sap.ui.define([
     "sap/ui/core/UIComponent",
-    "expensecreate/model/models"
+    "masterdatamanagement/model/models"
 ], (UIComponent, models) => {
     "use strict";
 
-    return UIComponent.extend("expensecreate.Component", {
+    return UIComponent.extend("masterdatamanagement.Component", {
         metadata: {
             manifest: "json",
             interfaces: [
