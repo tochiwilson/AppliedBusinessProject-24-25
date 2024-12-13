@@ -97,4 +97,31 @@ annotate service.Expenses with @(
             Value: projectName,
         },
     },
+    UI.SelectionFields           : [
+        startDate,
+        projectName,
+        status,
+        category.categoryName,
+        financing.financingName,
+    ],
 );
+
+annotate service.Expenses with {
+    startDate @Common.Label: 'Start Date'
+};
+
+annotate service.Expenses with {
+    projectName @Common.Label: 'Project Name'
+};
+
+annotate service.Expenses with {
+    status @Common.Label: 'Status'
+};
+
+annotate service.Categories with {
+    categoryName @Common.Label: 'Category'
+};
+
+annotate service.Financings with {
+    financingName @Common.Label: 'Financing Type'
+};
