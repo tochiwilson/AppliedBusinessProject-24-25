@@ -6,27 +6,27 @@ annotate service.Expenses with @(
         Data : [
             {
                 $Type: 'UI.DataField',
-                Label: 'Duration (Months)',
+                Label: '{i18n>DurationMonths}',
                 Value: durationMonths,
             },
             {
                 $Type: 'UI.DataField',
-                Label: 'CO2 Current',
+                Label: '{i18n>Co2Current}',
                 Value: envData.co2Current,
             },
             {
                 $Type: 'UI.DataField',
-                Label: 'CO2 Post Completion',
+                Label: '{i18n>Co2PostCompletion}',
                 Value: envData.co2PostCompletion,
             },
             {
                 $Type: 'UI.DataField',
-                Label: 'Water Usage Current',
+                Label: '{i18n>WaterUsageCurrent}',
                 Value: envData.waterUsageCurrent,
             },
             {
                 $Type: 'UI.DataField',
-                Label: 'Water Usage Post Completion',
+                Label: '{i18n>WaterUsagePostCompletion}',
                 Value: envData.waterUsagePostCompletion,
             },
         ],
@@ -99,29 +99,73 @@ annotate service.Expenses with @(
     },
     UI.SelectionFields           : [
         startDate,
-        projectName,
         status,
         category.categoryName,
         financing.financingName,
     ],
+    UI.DeleteHidden : true,
 );
 
 annotate service.Expenses with {
-    startDate @Common.Label: 'Start Date'
+    startDate @(Common.Label: '{i18n>StartDate}', )
 };
 
 annotate service.Expenses with {
-    projectName @Common.Label: 'Project Name'
+    projectName @(Common.Label: '{i18n>ProjectName}', )
 };
 
 annotate service.Expenses with {
-    status @Common.Label: 'Status'
+    status @(
+        Common.Label                   : '{i18n>Status}',
+        Common.ValueList               : {
+            $Type         : 'Common.ValueListType',
+            CollectionPath: 'Expenses',
+            Parameters    : [{
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: status,
+                ValueListProperty: 'status',
+            }, ],
+        },
+        Common.ValueListWithFixedValues: true,
+    )
 };
 
 annotate service.Categories with {
-    categoryName @Common.Label: 'Category'
+    categoryName @(
+        Common.Label                   : '{i18n>Category}',
+        Common.ValueList               : {
+            $Type         : 'Common.ValueListType',
+            CollectionPath: 'Categories',
+            Parameters    : [{
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: categoryName,
+                ValueListProperty: 'categoryDescription',
+            }, ],
+        },
+        Common.ValueListWithFixedValues: true,
+    )
 };
 
 annotate service.Financings with {
-    financingName @Common.Label: 'Financing Type'
+    financingName @(
+        Common.Label                   : '{i18n>FinancingType}',
+        Common.ValueList               : {
+            $Type         : 'Common.ValueListType',
+            CollectionPath: 'Financings',
+            Parameters    : [{
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: financingName,
+                ValueListProperty: 'financingDescription',
+            }, ],
+        },
+        Common.ValueListWithFixedValues: true,
+    )
+};
+
+annotate service.Categories with {
+    categoryDescription @Common.Text: categoryName
+};
+
+annotate service.Financings with {
+    financingDescription @Common.Text: financingName
 };

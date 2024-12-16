@@ -116,6 +116,35 @@
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "ResponsiveTable"
+                  },
+                  "columns": {
+                    "DataField::status": {
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::projectName": {
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::startDate": {
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::projectManager": {
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::category::categoryName": {
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::financing::financingName": {
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::envData::greenEnergyOutput": {
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::envData::greenPayback": {
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::envData::comments": {
+                      "widthIncludingColumnHeader": true
+                    }
                   }
                 }
               }
