@@ -127,6 +127,10 @@ modules:
       - expensecreate.zip
       name: expensecreate
       target-path: resources/
+    - artifacts:
+      - expensepiechart.zip
+      name: expensepiechart
+      target-path: resources/
 - name: masterdatamanagement
   type: html5
   path: app/master_data-management
@@ -150,6 +154,16 @@ modules:
 - name: expensecreate
   type: html5
   path: app/expense-create
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: expensepiechart
+  type: html5
+  path: app/expense-pie_chart
   build-parameters:
     build-result: dist
     builder: custom

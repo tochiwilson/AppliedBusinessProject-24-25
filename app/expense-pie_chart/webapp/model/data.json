@@ -1,0 +1,8 @@
+{
+  "products": [
+    { "Category": "Electronics", "Revenue": 12000 },
+    { "Category": "Clothing", "Revenue": 8000 },
+    { "Category": "Groceries", "Revenue": 5000 },
+    { "Category": "Toys", "Revenue": 3000 }
+  ]
+}
