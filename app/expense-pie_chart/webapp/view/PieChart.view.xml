@@ -1,18 +1,25 @@
-<mvc:View controllerName="expensepiechart.controller.PieChart"
-xmlns:viz="sap.viz.ui5.controls"
-    xmlns:viz.data="sap.viz.ui5.data" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+<mvc:View 
+    controllerName="expensepiechart.controller.PieChart"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:mvc="sap.ui.core.mvc" 
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
         <content>
-            <viz:VizFrame id="idPieChart" uiConfig="{applicationSet: 'fiori'}" height="400px" width="100%" vizType="pie">
+            <viz:VizFrame 
+                id="idPieChart" 
+                uiConfig="{applicationSet: 'fiori'}" 
+                height="400px" 
+                width="100%" 
+                vizType="pie">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{/products}">
+                    <viz.data:FlattenedDataset data="{/Expenses}">
                         <viz.data:dimensions>
-                            <viz.data:DimensionDefinition name="Category" value="{Category}" />
+                            <viz.data:DimensionDefinition name="Category" value="{category/categoryName}" />
                         </viz.data:dimensions>
                         <viz.data:measures>
-                            <viz.data:MeasureDefinition name="Revenue" value="{Revenue}" />
+                            <viz.data:MeasureDefinition name="Revenue" value="{amount}" />
                         </viz.data:measures>
                     </viz.data:FlattenedDataset>
                 </viz:dataset>
