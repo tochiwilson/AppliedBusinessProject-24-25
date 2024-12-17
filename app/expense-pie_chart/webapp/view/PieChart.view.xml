@@ -14,12 +14,12 @@
                 width="100%" 
                 vizType="pie">
                 <viz:dataset>
-                    <viz.data:FlattenedDataset data="{/Expenses}">
+                    <viz.data:FlattenedDataset data="{/ApprovedAmountsPerCategory}">
                         <viz.data:dimensions>
-                            <viz.data:DimensionDefinition name="Category" value="{category/categoryName}" />
+                            <viz.data:DimensionDefinition name="Category" value="{categoryName}" />
                         </viz.data:dimensions>
                         <viz.data:measures>
-                            <viz.data:MeasureDefinition name="Revenue" value="{amount}" />
+                            <viz.data:MeasureDefinition name="Revenue" value="{totalApprovedAmount}" />
                         </viz.data:measures>
                     </viz.data:FlattenedDataset>
                 </viz:dataset>

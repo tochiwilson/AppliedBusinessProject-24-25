@@ -50,4 +50,10 @@ context ExpenseApp {
             greenPayback             : String(100);
             comments                 : String(100);
     }
+
+    entity ApprovedAmountsPerCategory {
+        key categoryId   : Integer;
+            categoryName : String(100);
+            totalAmount  : Decimal(15, 2);
+    }
 }

@@ -137,6 +137,34 @@ module.exports = cds.service.impl(async (srv) => {
                 }
             });
         }
+
+        // Handler voor ApprovedAmountsPerCategory
+        srv.on('READ', 'ApprovedAmountsPerCategory', async (req) => {
+            try {
+                // Controleer of Expenses-data al is geladen
+                const expenses = dataCache.Expenses || (await getData(entityConfig.Expenses.endpoint));
+                const categories = dataCache.Categories || (await getData(entityConfig.Categories.endpoint));
+
+                // Bereken het totale goedgekeurde bedrag per categorie
+                const approvedAmountsPerCategory = categories.map((category) => {
+                    const totalAmount = expenses
+                        .filter(expense => expense.Status === 'Approved' && expense.CategoryId === category.CategoryId)
+                        .reduce((sum, expense) => sum + Number(expense.Amount || 0), 0);
+
+                    return {
+                        categoryId: category.CategoryId,
+                        categoryName: category.CategoryName,
+                        totalApprovedAmount: totalAmount,
+                    };
+                });
+
+                return approvedAmountsPerCategory;
+            } catch (error) {
+                console.error('Error calculating approved amounts per category:', error.message);
+                req.error(500, `Failed to calculate approved amounts per category: ${error.message}`);
+            }
+        });
+
     } catch (err) {
         console.error('Global service implementation error:', err.message);
         throw new Error('Service initialization failed.');
