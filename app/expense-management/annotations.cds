@@ -103,15 +103,22 @@ annotate service.Expenses with @(
         category.categoryName,
         financing.financingName,
     ],
-    UI.DeleteHidden : true,
 );
 
 annotate service.Expenses with {
-    startDate @(Common.Label: '{i18n>StartDate}', )
-};
-
-annotate service.Expenses with {
-    projectName @(Common.Label: '{i18n>ProjectName}', )
+    startDate @(
+        Common.Label                   : '{i18n>StartDate}',
+        Common.ValueList               : {
+            $Type         : 'Common.ValueListType',
+            CollectionPath: 'Expenses',
+            Parameters    : [{
+                $Type            : 'Common.ValueListParameterInOut',
+                LocalDataProperty: startDate,
+                ValueListProperty: 'startDate',
+            }, ],
+        },
+        Common.ValueListWithFixedValues: true,
+    )
 };
 
 annotate service.Expenses with {
@@ -139,7 +146,7 @@ annotate service.Categories with {
             Parameters    : [{
                 $Type            : 'Common.ValueListParameterInOut',
                 LocalDataProperty: categoryName,
-                ValueListProperty: 'categoryDescription',
+                ValueListProperty: 'categoryName',
             }, ],
         },
         Common.ValueListWithFixedValues: true,
@@ -155,17 +162,9 @@ annotate service.Financings with {
             Parameters    : [{
                 $Type            : 'Common.ValueListParameterInOut',
                 LocalDataProperty: financingName,
-                ValueListProperty: 'financingDescription',
+                ValueListProperty: 'financingName',
             }, ],
         },
         Common.ValueListWithFixedValues: true,
     )
-};
-
-annotate service.Categories with {
-    categoryDescription @Common.Text: categoryName
-};
-
-annotate service.Financings with {
-    financingDescription @Common.Text: financingName
 };
