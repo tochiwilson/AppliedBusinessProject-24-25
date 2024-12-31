@@ -7,6 +7,14 @@ sap.ui.define([
         onInit() {
 
             
-        }
+        },
+
+        // create methode
+
+        // edit methode
+
+        // delete methode ?
+
+        // state_change methode ?
     });
 });

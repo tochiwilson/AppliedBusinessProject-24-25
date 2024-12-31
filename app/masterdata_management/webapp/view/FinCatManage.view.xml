@@ -2,32 +2,68 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
-      <Table id="financingManagement" items="{/Financings}">
-    <columns>
-      <Column>
-        <Text text="Name" />
-      </Column>
-      <Column>
-        <Text text="Description" />
-      </Column>
-      <Column>
-        <Text text="State" />
-      </Column>
-      <Column>
-        <Text text="Edit" />
-      </Column>
-    </columns>
-    <items>
-      <ColumnListItem>
-        <cells>
-          <Text text="{financingName}"/> 
-          <Text text="{financingDescription}"/>
-          <Switch state="{path: 'isEnabled', type: 'sap.ui.model.type.Boolean'}" />
-          <Button text="Edit" icon="sap-icon://edit" press="onEditPress" />
-        </cells>
-      </ColumnListItem>
-    </items>
-  </Table>
+        <IconTabBar id="tabBar" selectedKey="financingManagement">
+            <items>
+                <!-- Financieringen Tab -->
+                <IconTabFilter id="financingTab" key="financingManagement" text="Financing Types">
+                    <Table id="financingManagement" items="{/Financings}">
+                        <columns>
+                            <Column>
+                                <Text text="Name" />
+                            </Column>
+                            <Column>
+                                <Text text="Description" />
+                            </Column>
+                            <Column>
+                                <Text text="State" />
+                            </Column>
+                            <Column>
+                                <Text text="Edit" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{financingName}"/> 
+                                    <Text text="{financingDescription}"/>
+                                    <Switch state="{path: 'isEnabled', type: 'sap.ui.model.type.Boolean'}" />
+                                    <Button text="Edit" icon="sap-icon://edit" press="onEditPress" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </IconTabFilter>
+                
+                <!-- Categorieën Tab -->
+                <IconTabFilter id="categoryTab" key="categoryManagement" text="Categories">
+                    <Table id="categoryManagement" items="{/Categories}">
+                        <columns>
+                            <Column>
+                                <Text text="Name" />
+                            </Column>
+                            <Column>
+                                <Text text="Description" />
+                            </Column>
+                            <Column>
+                                <Text text="State" />
+                            </Column>
+                            <Column>
+                                <Text text="Edit" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{categoryName}"/> 
+                                    <Text text="{categoryDescription}"/>
+                                    <Switch state="{path: 'isActive', type: 'sap.ui.model.type.Boolean'}" />
+                                    <Button text="Edit" icon="sap-icon://edit" press="onEditCategoryPress" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </IconTabFilter>
+            </items>
+        </IconTabBar>
     </Page>
 </mvc:View>
-
