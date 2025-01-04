@@ -10,8 +10,16 @@ sap.ui.define([
                 name: "masterdatamanagement.view.FinanceType"
             });
 
-            this.oDialog.open();
-        }
+            
+        },
+
+        // create methode
+
+        // edit methode
+
+        // delete methode ?
+
+        // state_change methode ?
     });
     
 });

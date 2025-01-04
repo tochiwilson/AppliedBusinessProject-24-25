@@ -9,6 +9,7 @@
         "@sap-cloud-sdk/http-client": "^3.23.0",
         "@sap/cds": "^8.5.1",
         "@sap/xsenv": "^5.4.0",
+        "cds": "^0.2.0",
         "dotenv": "^16.4.5",
         "express": "^4"
     },

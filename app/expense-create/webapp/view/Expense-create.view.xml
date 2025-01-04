@@ -1,6 +1,137 @@
-<mvc:View controllerName="expensecreate.controller.Expense-create"
+<mvc:View
+    controllerName="expensecreate.controller.Expense-create"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form">
     <Page id="page" title="{i18n>title}">
+        <content>
+            <VBox class="sapUiResponsiveMargin">
+                <form:SimpleForm 
+                    editable="true"
+                    layout="ResponsiveGridLayout"
+                    labelSpanXL="3"
+                    labelSpanL="3"
+                    labelSpanM="3"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanXL="4"
+                    emptySpanL="4"
+                    emptySpanM="4"
+                    emptySpanS="0"
+                    columnsXL="2"
+                    columnsL="2"
+                    columnsM="1"
+                    singleContainerFullSize="false">
+                    
+                    <form:content>
+                        <core:Title text="Expense Details" />
+                        
+                        <Label id="projectNameLabel" text="Project Name" required="true"/>
+                        <Input 
+                            id="projectName" 
+                            placeholder="Enter Project Name" 
+                            required="true"/>
+
+                        <Label id="projectManagerLabel" text="Project Manager" required="true"/>
+                        <Input 
+                            id="projectManager" 
+                            placeholder="Enter Project Manager" 
+                            required="true"/>
+
+                        <Label id="amountLabel" text="Project Amount" required="true"/>
+                        <Input 
+                            id="amount" 
+                            type="Number" 
+                            placeholder="Enter project amount" 
+                            required="true"/>
+
+                        <Label id="startDateLabel" text="Start Date" required="true"/>
+                        <DatePicker 
+                            id="startDate" 
+                            displayFormat="yyyy-MM-dd"
+                            valueFormat="yyyy-MM-dd"/>
+
+                        <Label id="categoryLabel" text="Category" required="true"/>
+                        <Select 
+                            id="category"
+                            forceSelection="false"
+                            items="{
+                                path: 'viewModel>/categories'
+                            }">
+                            <core:Item 
+                                key="{viewModel>categoryId}" 
+                                text="{viewModel>categoryName}"/>
+                        </Select>
+
+                        <Label id="financingTypeLabel" text="Financing Type" required="true"/>
+                        <Select 
+                            id="financingType"
+                            forceSelection="false"
+                            items="{
+                                path: 'viewModel>/financings'
+                            }">
+                            <core:Item 
+                                key="{viewModel>financingId}" 
+                                text="{viewModel>financingName}"/>
+                        </Select>
+
+
+                    <Label id="durationMonthsLabel" text="Duration (Months)" required="true"/>
+                    <Input 
+                        id="durationMonths" 
+                        type="Number" 
+                        placeholder="Enter duration in months" 
+                        required="true"/>
+
+                    <Label text="Environmental Data" class="sapUiSmallMargin"/>
+                    
+                    <Label id="greenEnergyOutputLabel" text="Green Energy Output (%)"/>
+                    <Input 
+                        id="greenEnergyOutput" 
+                        type="Number" 
+                        placeholder="Enter green energy output"/>
+
+                    <Label id="co2CurrentLabel" text="Current CO2 Impact"/>
+                    <Input 
+                        id="co2Current" 
+                        placeholder="Enter current CO2 impact"/>
+
+                    <Label id="co2PostCompletionLabel" text="Post-completion CO2 Impact"/>
+                    <Input 
+                        id="co2PostCompletion" 
+                        placeholder="Enter post-completion CO2 impact"/>
+
+                    <Label id="waterUsageCurrentLabel" text="Current Water Usage"/>
+                    <Input 
+                        id="waterUsageCurrent" 
+                        placeholder="Enter current water usage"/>
+
+                    <Label id="waterUsagePostCompletionLabel" text="Post-completion Water Usage"/>
+                    <Input 
+                        id="waterUsagePostCompletion" 
+                        placeholder="Enter post-completion water usage"/>
+
+                    <Label id="greenPaybackLabel" text="Green Payback"/>
+                    <Input 
+                        id="greenPayback" 
+                        placeholder="Enter green payback details"/>
+
+                    <Label id="commentsLabel" text="Comments"/>
+                    <TextArea 
+                        id="comments" 
+                        placeholder="Enter additional comments" 
+                        rows="5"/>
+
+                    </form:content>
+                </form:SimpleForm>
+                
+                    <Button 
+                        id="submitButton" 
+                        text="Submit Project" 
+                        press=".onSubmit"
+                        type="Emphasized"/>
+            </VBox>
+        </content>
     </Page>
 </mvc:View>
