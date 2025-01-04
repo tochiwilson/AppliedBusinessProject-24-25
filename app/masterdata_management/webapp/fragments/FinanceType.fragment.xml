@@ -1,14 +1,5 @@
-<mvc:View controllerName="masterdatamanagement.controller.FinCatManage"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    <IconTabBar
-		id="idIconTabBarNoIcons"
-		expanded="{device>/isNoPhone}"
-		class="sapUiResponsiveContentPadding">
-		<items>
-			<IconTabFilter text="Financing Types" key="fin_type">
- <Table id="financingManagementtt" items="{/Financings}">
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <!-- <Table id="financingManagementtt" items="{/Financings}">
         <columns>
             <Column>
                 <Text text="Name" />
@@ -33,19 +24,5 @@
                 </cells>
             </ColumnListItem>
         </items>
-    </Table>
-				</IconTabFilter>
-			<IconTabFilter text="CAR Category" key="car_cat">
-				<Text text="Car categories" />
-			</IconTabFilter>
-		</items>
-	</IconTabBar>
-  	<Button
-				id="FinanceTypeButton"
-				text="Try me!"
-				press=".onOpenDialog"
-				class="sapUiSmallMarginEnd"
-			/>
-    </Page>
-</mvc:View>
-
+    </Table> -->
+</core:FragmentDefinition>

@@ -4,9 +4,14 @@ sap.ui.define([
     "use strict";
 
     return Controller.extend("masterdatamanagement.controller.FinCatManage", {
-        onInit() {
+        onInit() {},
+        async onOpenDialog() {
+            this.oDialog ??= await this.loadFragment({
+                name: "masterdatamanagement.view.FinanceType"
+            });
 
-            
+            this.oDialog.open();
         }
     });
+    
 });
