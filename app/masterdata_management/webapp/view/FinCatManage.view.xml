@@ -2,49 +2,90 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
-    <IconTabBar
-		id="idIconTabBarNoIcons"
-		expanded="{device>/isNoPhone}"
-		class="sapUiResponsiveContentPadding">
-		<items>
-			<IconTabFilter text="Financing Types" key="fin_type">
- <Table id="financingManagementtt" items="{/Financings}">
-        <columns>
-            <Column>
-                <Text text="Name" />
-            </Column>
-            <Column>
-                <Text text="Description" />
-            </Column>
-            <Column>
-                <Text text="State" />
-            </Column>
-            <Column>
-                <Text text="Edit" />
-            </Column>
-        </columns>
-        <items>
-            <ColumnListItem>
-                <cells>
-                    <Text text="{financingName}" />
-                    <Text text="{financingDescription}" />
-                    <Switch state="{path: 'isEnabled', type: 'sap.ui.model.type.Boolean'}" />
-                    <Button text="Edit" icon="sap-icon://edit" press="onEditPress" />
-                </cells>
-            </ColumnListItem>
-        </items>
-    </Table>
-				</IconTabFilter>
-			<IconTabFilter text="CAR Category" key="car_cat">
-				<Text text="Car categories" />
-			</IconTabFilter>
-		</items>
-	</IconTabBar>
-  	<Button
-				id="FinanceTypeButton"
-				text="Try me!"
-				press=".onOpenDialog"
-				class="sapUiSmallMarginEnd"
-			/>
+        <IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+            <items>
+                <IconTabFilter text="Financing Types" key="fin_type">
+                    <Table id="financingManagementtt" items="{/Financings}">
+                        <headerToolbar>
+                            <Toolbar>
+                                <content>
+                                    <Title text="Financing Types" level="H2"/>
+                                    <ToolbarSpacer/>
+                                    <Button icon="sap-icon://add" text="Create" press=".onCreate"/>
+                                </content>
+                            </Toolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column>
+                                <Text text="Name" />
+                            </Column>
+                            <Column>
+                                <Text text="Description" />
+                            </Column>
+                            <Column>
+                                <Text text="State" />
+                            </Column>
+                            <Column>
+                                <Text text="Actions" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{financingName}" />
+                                    <Text text="{financingDescription}" />
+                                    <Switch state="{path: 'isEnabled', type: 'sap.ui.model.type.Boolean'}" />
+                                    <HBox>
+                                        <Button icon="sap-icon://edit" text="Edit" press=".onEditPress" />
+                                        <Button icon="sap-icon://delete" text="Delete" press=".onDelete" />
+                                    </HBox>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </IconTabFilter>
+                
+                <IconTabFilter text="Project Categories" key="project_cat">
+                    <Table id="categoryManagement" items="{/Categories}">
+                        <headerToolbar>
+                            <Toolbar>
+                                <content>
+                                    <Title text="Project Categories" level="H2"/>
+                                    <ToolbarSpacer/>
+                                    <Button icon="sap-icon://add" text="Create" press=".onCreate"/>
+                                </content>
+                            </Toolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column>
+                                <Text text="Name" />
+                            </Column>
+                            <Column>
+                                <Text text="Description" />
+                            </Column>
+                            <Column>
+                                <Text text="State" />
+                            </Column>
+                            <Column>
+                                <Text text="Actions" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{categoryName}" />
+                                    <Text text="{categoryDescription}" />
+                                    <Switch state="{path: 'isEnabled', type: 'sap.ui.model.type.Boolean'}" />
+                                    <HBox>
+                                        <Button icon="sap-icon://edit" text="Edit" press=".onEditCategoryPress" />
+                                        <Button icon="sap-icon://delete" text="Delete" press=".onDelete" />
+                                    </HBox>
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </IconTabFilter>
+            </items>
+        </IconTabBar>
     </Page>
 </mvc:View>

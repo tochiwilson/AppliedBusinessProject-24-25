@@ -1,0 +1,31 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog
+        title="{dialog>/title}"
+        class="sapUiPopupWithPadding">
+        <f:SimpleForm
+            editable="true"
+            layout="ResponsiveGridLayout"
+            labelSpanXL="4"
+            labelSpanL="4"
+            labelSpanM="4"
+            labelSpanS="12">
+            <f:content>
+                <Label text="Name" required="true" />
+                <Input value="{dialog>/editObject/name}" />
+                
+                <Label text="Description" />
+                <Input value="{dialog>/editObject/description}" />
+                
+                <Label text="Status" />
+                <Switch state="{dialog>/editObject/isEnabled}" />
+            </f:content>
+        </f:SimpleForm>
+        <buttons>
+            <Button text="Save" type="Emphasized" press=".onSaveItem"/>
+            <Button text="Cancel" press=".onCancelEdit"/>
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>
