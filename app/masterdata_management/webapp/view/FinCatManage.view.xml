@@ -1,7 +1,10 @@
 <mvc:View controllerName="masterdatamanagement.controller.FinCatManage"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page id="page" 
+        title="{i18n>title}"
+        showNavButton="true"
+        navButtonPress=".onNavBack">
         <IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
             <items>
                 <IconTabFilter text="Financing Types" key="fin_type">

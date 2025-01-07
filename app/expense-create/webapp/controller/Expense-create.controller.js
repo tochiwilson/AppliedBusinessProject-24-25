@@ -172,6 +172,10 @@ sap.ui.define([
             }
 
             return bValid;
+        },
+
+        onNavBack: function() {
+            window.location.href = "../../index.html";
         }
     });
 });

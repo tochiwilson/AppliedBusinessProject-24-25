@@ -214,6 +214,10 @@ sap.ui.define([
 
         onCancelEdit: function() {
             this.editDialog.close();
+        },
+
+        onNavBack: function() {
+            window.location.href = "../../index.html";
         }
     });
 });
