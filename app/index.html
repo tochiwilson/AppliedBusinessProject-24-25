@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Management Suite</title>
+    <script id="sap-ui-bootstrap"
+        src="https://sapui5.hana.ondemand.com/1.120.21/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-libs="sap.m, sap.f"
+        data-sap-ui-async="true"
+        data-sap-ui-compatVersion="edge">
+    </script>
+    <script>
+        sap.ui.getCore().attachInit(function() {
+            // Create a FlexBox for better tile layout
+            var oFlexBox = new sap.m.FlexBox({
+                width: "100%",
+                justifyContent: "Center",
+                wrap: "Wrap",
+                items: [
+                    new sap.m.StandardTile({
+                        icon: "sap-icon://add-document",
+                        title: "Create Expense",
+                        info: "New expense entry",
+                        press: function() {
+                            window.location.href = "expense-create/webapp/";
+                        }
+                    }).addStyleClass("sapUiTinyMargin"),
+
+                    new sap.m.StandardTile({
+                        icon: "sap-icon://expense-report",
+                        title: "Expense Management",
+                        info: "View and manage expenses",
+                        press: function() {
+                            window.location.href = "expense-management/webapp/";
+                        }
+                    }).addStyleClass("sapUiTinyMargin"),
+
+                    new sap.m.StandardTile({
+                        icon: "sap-icon://master-task-triangle",
+                        title: "Master Data",
+                        info: "Manage categories",
+                        press: function() {
+                            window.location.href = "masterdata_management/webapp/";
+                        }
+                    }).addStyleClass("sapUiTinyMargin")
+                ]
+            }).addStyleClass("sapUiMediumMarginTop");
+
+            // Create page with better styling
+            var oPage = new sap.m.Page({
+                title: "Expense Management Suite",
+                titleAlignment: "Center",
+                backgroundDesign: "Transparent",
+                content: [oFlexBox]
+            });
+
+            // Create app
+            var oApp = new sap.m.App({
+                pages: [oPage]
+            });
+
+            // Place app in DOM
+            oApp.placeAt("content");
+        });
+    </script>
+</head>
+<body class="sapUiBody" id="content">
+</body>
+</html>
