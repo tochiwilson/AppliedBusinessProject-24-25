@@ -1,223 +1,175 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/m/MessageToast",
     "sap/m/MessageBox",
-    "sap/ui/model/json/JSONModel"
-], (Controller, MessageToast, MessageBox, JSONModel) => {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/Dialog",
+    "sap/m/Button",
+    "sap/m/Label",
+    "sap/m/Input",
+    "sap/m/TextArea"
+], function (Controller, MessageBox, JSONModel, Dialog, Button, Label, Input, TextArea) {
     "use strict";
 
     return Controller.extend("masterdatamanagement.controller.FinCatManage", {
-        onInit() {
-            // Initialize mock data
-            const oModel = new JSONModel({
-                Categories: [
-                    { ID: "1", categoryName: "Category 1", categoryDescription: "Description 1", isEnabled: true },
-                    { ID: "2", categoryName: "Category 2", categoryDescription: "Description 2", isEnabled: false }
-                ],
-                Financings: [
-                    { ID: "1", financingName: "Financing 1", financingDescription: "Description 1", isEnabled: true },
-                    { ID: "2", financingName: "Financing 2", financingDescription: "Description 2", isEnabled: false }
-                ]
+        onInit: function () {
+            // View model to manage UI states and properties
+            const oViewModel = new JSONModel({
+                busy: false,
+                editMode: false,
+                currentItem: null,
+                currentType: null
             });
-            
-            this.getView().setModel(oModel);
+            this.getView().setModel(oViewModel, "viewModel");
+        },
 
-            // Dialog model voor edit/create
-            this.dialogModel = new JSONModel({
-                title: "",
-                editObject: {},
-                editPath: "",
-                entityType: ""
+        onCreate: function () {
+            const sKey = this.byId("idIconTabBarNoIcons").getSelectedKey();
+            const bIsCategory = sKey === "project_cat";
+
+            this._showDialog({
+                title: `Create ${bIsCategory ? 'Category' : 'Financing Type'}`,
+                type: bIsCategory ? 'category' : 'financing'
             });
-            this.getView().setModel(this.dialogModel, "dialog");
         },
 
-        onCreate: function() {
-            const sIconTabKey = this.byId("idIconTabBarNoIcons").getSelectedKey();
-            const isCategory = sIconTabKey === "project_cat";
-            
-            const dialogData = {
-                title: isCategory ? "Create Category" : "Create Finance Type",
-                editPath: "",
-                entityType: isCategory ? "category" : "financing",
-                editObject: {
-                    name: "",
-                    description: "",
-                    isEnabled: true
-                }
-            };
+        onEditPress: function (oEvent) {
+            const oBindingContext = oEvent.getSource().getBindingContext();
+            const oItem = oBindingContext.getObject();
 
-            this.dialogModel.setData(dialogData);
-
-            if (!this.editDialog) {
-                this.loadFragment({
-                    name: "masterdatamanagement.fragments.EditDialog"
-                }).then((oDialog) => {
-                    this.editDialog = oDialog;
-                    this.editDialog.open();
-                });
-            } else {
-                this.editDialog.open();
-            }
+            this._showDialog({
+                title: "Edit Financing Type",
+                type: 'financing',
+                item: oItem,
+                edit: true
+            });
         },
 
-        onSaveItem: function() {
-            const dialogData = this.dialogModel.getData();
-            const oModel = this.getView().getModel();
-            const modelData = oModel.getData();
-            
-            if (dialogData.entityType === "category") {
-                if (dialogData.editPath) {
-                    // Update existing category
-                    const pathParts = dialogData.editPath.split("/");
-                    const index = parseInt(pathParts[pathParts.length - 1]);
-                    
-                    modelData.Categories[index] = {
-                        ...modelData.Categories[index],
-                        categoryName: dialogData.editObject.name,
-                        categoryDescription: dialogData.editObject.description,
-                        isEnabled: dialogData.editObject.isEnabled
-                    };
-                } else {
-                    // Create new category
-                    modelData.Categories.push({
-                        ID: Date.now().toString(),
-                        categoryName: dialogData.editObject.name,
-                        categoryDescription: dialogData.editObject.description,
-                        isEnabled: dialogData.editObject.isEnabled
-                    });
-                }
-            } else {
-                if (dialogData.editPath) {
-                    // Update existing financing
-                    const pathParts = dialogData.editPath.split("/");
-                    const index = parseInt(pathParts[pathParts.length - 1]);
-                    
-                    modelData.Financings[index] = {
-                        ...modelData.Financings[index],
-                        financingName: dialogData.editObject.name,
-                        financingDescription: dialogData.editObject.description,
-                        isEnabled: dialogData.editObject.isEnabled
-                    };
-                } else {
-                    // Create new financing
-                    modelData.Financings.push({
-                        ID: Date.now().toString(),
-                        financingName: dialogData.editObject.name,
-                        financingDescription: dialogData.editObject.description,
-                        isEnabled: dialogData.editObject.isEnabled
-                    });
-                }
-            }
+        onEditCategoryPress: function (oEvent) {
+            const oBindingContext = oEvent.getSource().getBindingContext();
+            const oItem = oBindingContext.getObject();
 
-            // Update model and force refresh
-            oModel.setData(modelData);
-            oModel.refresh(true);
-            
-            MessageToast.show(`${dialogData.entityType} ${dialogData.editPath ? 'updated' : 'created'} successfully`);
-            this.editDialog.close();
+            this._showDialog({
+                title: "Edit Category",
+                type: 'category',
+                item: oItem,
+                edit: true
+            });
         },
 
-        onDelete: function(oEvent) {
-            const oSource = oEvent.getSource();
-            const oBindingContext = oSource.getBindingContext();
-            const sPath = oBindingContext.getPath();
-            const oModel = this.getView().getModel();
-            const modelData = oModel.getData();
-            
-            const entityType = sPath.includes("Categories") ? "category" : "financing";
-            const itemName = entityType === "category" ? 
-                oBindingContext.getProperty("categoryName") : 
-                oBindingContext.getProperty("financingName");
+        onDelete: function (oEvent) {
+            const oBindingContext = oEvent.getSource().getBindingContext();
+            const oItem = oBindingContext.getObject();
+            const sType = this.byId("idIconTabBarNoIcons").getSelectedKey() === "project_cat" ? "Categories" : "Financings";
 
-            MessageBox.confirm(
-                `Are you sure you want to delete this ${entityType}: ${itemName}?`, {
-                    title: "Confirm Deletion",
-                    onClose: (oAction) => {
-                        if (oAction === MessageBox.Action.OK) {
-                            if (entityType === "category") {
-                                modelData.Categories = modelData.Categories.filter(
-                                    item => item.ID !== oBindingContext.getObject().ID
-                                );
-                            } else {
-                                modelData.Financings = modelData.Financings.filter(
-                                    item => item.ID !== oBindingContext.getObject().ID
-                                );
-                            }
-                            oModel.setData(modelData);
-                            MessageToast.show(`${entityType} deleted successfully`);
-                        }
+            MessageBox.confirm("Are you sure you want to delete this item?", {
+                onClose: (sAction) => {
+                    if (sAction === MessageBox.Action.OK) {
+                        oBindingContext.delete().then(() => {
+                            MessageBox.success("Item deleted successfully");
+                        }).catch((error) => {
+                            MessageBox.error("Error deleting item: " + error.message);
+                        });
                     }
                 }
-            );
+            });
         },
 
-        onEditCategoryPress: function(oEvent) {
-            const oBindingContext = oEvent.getSource().getBindingContext();
-            const oData = oBindingContext.getObject();
-            const pathParts = oBindingContext.getPath().split("/");
-            
-            const dialogData = {
-                title: "Edit Category",
-                editPath: oBindingContext.getPath(),
-                entityType: "category",
-                editObject: {
-                    name: oData.categoryName,
-                    description: oData.categoryDescription,
-                    isEnabled: oData.isEnabled
-                }
-            };
+        _showDialog: function (oConfig) {
+            const oDialog = new Dialog({
+                title: oConfig.title,
+                contentWidth: "400px",
+                content: [
+                    new Label({ text: "Name", required: true }),
+                    new Input({
+                        value: oConfig.item ? oConfig.item[oConfig.type + 'Name'] : "",
+                        required: true
+                    }),
+                    new Label({ text: "Description", required: true }),
+                    new TextArea({
+                        value: oConfig.item ? oConfig.item[oConfig.type + 'Description'] : "",
+                        rows: 4,
+                        width: "100%",
+                        required: true
+                    })
+                ],
+                beginButton: new Button({
+                    text: oConfig.edit ? "Save" : "Create",
+                    type: "Emphasized",
+                    press: () => this._handleDialogSubmit(oDialog, oConfig)
+                }),
+                endButton: new Button({
+                    text: "Cancel",
+                    press: () => oDialog.close()
+                }),
+                afterClose: () => oDialog.destroy()
+            });
 
-            this.dialogModel.setData(dialogData);
+            this.getView().addDependent(oDialog);
+            oDialog.open();
+        },
 
-            if (!this.editDialog) {
-                this.loadFragment({
-                    name: "masterdatamanagement.fragments.EditDialog"
-                }).then((oDialog) => {
-                    this.editDialog = oDialog;
-                    this.editDialog.open();
-                });
-            } else {
-                this.editDialog.open();
+        _handleDialogSubmit: async function (oDialog, oConfig) {
+            const [nameInput, descInput] = oDialog.getContent().filter(c => c.getValue);
+            const sName = nameInput.getValue().trim();
+            const sDescription = descInput.getValue().trim();
+
+            if (!sName || !sDescription) {
+                MessageBox.error("Please fill in all required fields");
+                return;
             }
-        },
 
-        onEditPress: function(oEvent) {
-            const oBindingContext = oEvent.getSource().getBindingContext();
-            const oData = oBindingContext.getObject();
-            const pathParts = oBindingContext.getPath().split("/");
-            
-            const dialogData = {
-                title: "Edit Finance Type",
-                editPath: oBindingContext.getPath(),
-                entityType: "financing",
-                editObject: {
-                    name: oData.financingName,
-                    description: oData.financingDescription,
-                    isEnabled: oData.isEnabled
-                }
-            };
-
-            this.dialogModel.setData(dialogData);
-
-            if (!this.editDialog) {
-                this.loadFragment({
-                    name: "masterdatamanagement.fragments.EditDialog"
-                }).then((oDialog) => {
-                    this.editDialog = oDialog;
-                    this.editDialog.open();
-                });
+            if (oConfig.edit) {
+                this._updateEntity(oConfig, sName, sDescription);
             } else {
-                this.editDialog.open();
+                this._createEntity(oConfig, sName, sDescription);
             }
+
+            oDialog.close();
         },
 
-        onCancelEdit: function() {
-            this.editDialog.close();
+        _createEntity: function (oConfig, sName, sDescription) {
+            const oModel = this.getView().getModel();
+            const sEntitySet = oConfig.type === 'category' ? 'Categories' : 'Financings';
+
+            const oBindingContext = oModel.bindContext(`/${sEntitySet}`, null, {
+                $$updateGroupId: "createGroup"
+            });
+
+            oBindingContext.setParameter("data", {
+                [oConfig.type + "Name"]: sName,
+                [oConfig.type + "Description"]: sDescription
+            });
+
+            oModel.submitChanges({
+                groupId: "createGroup",
+                success: () => MessageBox.success("Item created successfully"),
+                error: (oError) => MessageBox.error("Error creating item: " + oError.message)
+            });
         },
 
-        onNavBack: function() {
-            window.location.href = "../../index.html";
+        _updateEntity: function (oConfig, sName, sDescription) {
+            const oModel = this.getView().getModel();
+            const sEntitySet = oConfig.type === 'category' ? 'Categories' : 'Financings';
+
+            const oBindingContext = oModel.bindContext(`/${sEntitySet}(${oConfig.item[oConfig.type + 'Id']})`, null, {
+                $$updateGroupId: "updateGroup"
+            });
+
+            oBindingContext.setParameter("data", {
+                [oConfig.type + "Name"]: sName,
+                [oConfig.type + "Description"]: sDescription
+            });
+
+            oModel.submitChanges({
+                groupId: "updateGroup",
+                success: () => MessageBox.success("Item updated successfully"),
+                error: (oError) => MessageBox.error("Error updating item: " + oError.message)
+            });
+        },
+
+        onNavBack: function () {
+            const oRouter = this.getOwnerComponent().getRouter();
+            oRouter.navTo("RouteHome", {}, true);
         }
     });
 });

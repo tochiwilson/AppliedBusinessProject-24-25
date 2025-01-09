@@ -229,6 +229,150 @@ module.exports = cds.service.impl(async (srv) => {
                 envData: envDataResponse.data
             };
         });
+
+        srv.on('CREATE', 'Financings', async (req) => {
+            const countResponse = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'GET',
+                    url: '/FinancingSet/$count',
+                    headers: { 'Accept': 'application/json' }
+                }
+            );
+
+            const recordCount = parseInt(countResponse.data, 10);
+            const newId = recordCount + 1;
+
+            const financingData = {
+                Mandt: '238',
+                FinancingId: newId.toString(),
+                FinancingName: req.data.financingName,
+                FinancingDescription: req.data.financingDescription
+            };
+
+            const response = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'POST',
+                    url: '/FinancingSet',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    data: financingData
+                }
+            );
+
+            return response.data;
+        });
+
+        srv.on('UPDATE', 'Financings', async (req) => {
+            const financingData = {
+                FinancingName: req.data.financingName,
+                FinancingDescription: req.data.financingDescription
+            };
+
+            const response = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'PUT',
+                    url: `/FinancingSet(Mandt='238',FinancingId=${req.data.financingId}'l)`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    data: financingData
+                }
+            );
+
+            return response.data;
+        });
+
+        srv.on('DELETE', 'Financings', async (req) => {
+
+            const response = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'DELETE',
+                    url: `/FinancingSet(Mandt='238',FinancingId=${req.data.financingId})`,
+                    headers: { 'Accept': 'application/json' }
+                }
+            );
+
+            return response.data;
+        });
+
+        srv.on('CREATE', 'Categories', async (req) => {
+            const countResponse = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'GET',
+                    url: '/CategorySet/$count',
+                    headers: { 'Accept': 'application/json' }
+                }
+            );
+
+            const recordCount = parseInt(countResponse.data, 10);
+            const newId = recordCount + 1;
+
+            const categoryData = {
+                Mandt: '238',
+                CategoryId: newId.toString(),
+                CategoryName: req.data.categoryName,
+                CategoryDescription: req.data.categoryDescription
+            };
+
+            const response = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'POST',
+                    url: '/CategorySet',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    data: categoryData
+                }
+            );
+
+            return response.data;
+        });
+
+        srv.on('UPDATE', 'Categories', async (req) => {
+            const categoryData = {
+                CategoryName: req.data.categoryName,
+                CategoryDescription: req.data.categoryDescription
+            };
+
+            const response = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'PUT',
+                    url: `/CategorySet(Mandt='238',CategoryId=${req.data.categoryId})`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    data: categoryData
+                }
+            );
+
+            return response.data;
+        });
+
+        srv.on('DELETE', 'Categories', async (req) => {
+            const response = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'DELETE',
+                    url: `/CategorySet(Mandt='238',CategoryId=${req.data.categoryId})`,
+                    headers: { 'Accept': 'application/json' }
+                }
+            );
+
+            return response.data;
+        });
+
     } catch (err) {
         console.error('Global service implementation error:', err.message);
         throw new Error('Service initialization failed.');
