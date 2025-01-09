@@ -9,127 +9,101 @@ sap.ui.define([
         onInit: function () {
             const oViewModel = new JSONModel({
                 categories: [],
-                financings: []
+                financings: [],
+                busy: false
             });
             this.getView().setModel(oViewModel, "viewModel");
             this._loadReferenceData();
-
-            // Debug: Log the model initialization
-            console.log("Main Model:", this.getOwnerComponent().getModel());
-            console.log("View Model:", this.getView().getModel("viewModel"));
         },
 
-        _loadReferenceData: async function() {
-            try {
-                const oModel = this.getOwnerComponent().getModel();
-                console.log("Loading reference data with model:", oModel);
-                
-                // Load Categories
-                const oCategoriesBinding = oModel.bindList("/Categories");
-                const categoriesContexts = await oCategoriesBinding.requestContexts(0, 100);
-                console.log("Loaded categories:", categoriesContexts);
-                const aCategories = categoriesContexts.map(oContext => oContext.getObject());
-                
-                // Load Financings
-                const oFinancingsBinding = oModel.bindList("/Financings");
-                const financingsContexts = await oFinancingsBinding.requestContexts(0, 100);
-                console.log("Loaded financings:", financingsContexts);
-                const aFinancings = financingsContexts.map(oContext => oContext.getObject());
-
-                // Update view model
-                const oViewModel = this.getView().getModel("viewModel");
-                oViewModel.setProperty("/categories", aCategories);
-                oViewModel.setProperty("/financings", aFinancings);
-                
-                console.log("Reference data loaded successfully:", {
-                    categories: aCategories,
-                    financings: aFinancings
-                });
-            } catch (error) {
-                console.error("Error loading reference data:", error);
-                MessageBox.error("Error loading reference data: " + (error.message || "Unknown error"));
+        _formatDate: function (date) {
+            if (date) {
+                return new Date(date).toISOString().split('T')[0];
             }
+            return null;
         },
 
-        onSubmit: async function() {
+        onSubmit: async function () {
             if (!this._validateForm()) {
                 return;
             }
 
+            const oViewModel = this.getView().getModel("viewModel");
+
             try {
-                sap.ui.core.BusyIndicator.show(0);
+                oViewModel.setProperty("/busy", true);
+
                 const oModel = this.getOwnerComponent().getModel();
-                
-                // Create expense entry
-                const expenseData = {
-                    projectName: this.byId("projectName").getValue(),
-                    projectManager: this.byId("projectManager").getValue(),
-                    amount: parseFloat(this.byId("amount").getValue()),
-                    startDate: this.byId("startDate").getValue(),
-                    categoryId: parseInt(this.byId("category").getSelectedKey()),
-                    financingId: parseInt(this.byId("financingType").getSelectedKey()),
+
+                // Format dates in ISO format (YYYY-MM-DD)
+                const startDate = this.byId("startDate").getDateValue();
+                const formattedStartDate = startDate
+                    ? `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}-${String(startDate.getDate()).padStart(2, "0")}`
+                    : null;
+
+                const submittedOn = new Date();
+                const formattedSubmittedOn = `${submittedOn.getFullYear()}-${String(submittedOn.getMonth() + 1).padStart(2, "0")}-${String(submittedOn.getDate()).padStart(2, "0")}`;
+
+                // Combineer Expense en EnvData
+                const payload = {
+                    projectName: this.byId("projectName").getValue().trim(),
+                    projectManager: this.byId("projectManager").getValue().trim(),
+                    amount: this.byId("amount").getValue(),
+                    startDate: formattedStartDate,
+                    categoryId: this.byId("category").getSelectedKey(),
+                    financingId: this.byId("financingType").getSelectedKey(),
                     durationMonths: parseInt(this.byId("durationMonths").getValue()),
-                    status: "Pending"
-                };
-
-                console.log("Creating expense with data:", expenseData);
-
-                // Create the expense list binding
-                const oExpenseListBinding = oModel.bindList("/Expenses");
-                console.log("Expense list binding created:", oExpenseListBinding);
-
-                // Create the expense context
-                const oExpenseContext = oExpenseListBinding.create(expenseData);
-                console.log("Expense context created:", oExpenseContext);
-
-                // Wait for the creation to complete
-                await oExpenseContext.created();
-                console.log("Expense created successfully");
-                
-                // Get the created expense data
-                const createdExpense = oExpenseContext.getObject();
-                console.log("Created expense object:", createdExpense);
-
-                // Create environmental data
-                const envData = {
-                    projectId: createdExpense.projectId,
-                    expenseId: createdExpense.expenseId,
-                    greenEnergyOutput: parseFloat(this.byId("greenEnergyOutput").getValue()) || 0,
-                    co2Current: this.byId("co2Current").getValue() || "",
-                    co2PostCompletion: this.byId("co2PostCompletion").getValue() || "",
-                    waterUsageCurrent: this.byId("waterUsageCurrent").getValue() || "",
-                    waterUsagePostCompletion: this.byId("waterUsagePostCompletion").getValue() || "",
-                    greenPayback: this.byId("greenPayback").getValue() || "",
-                    comments: this.byId("comments").getValue() || ""
-                };
-
-                console.log("Creating environmental data:", envData);
-
-                const oEnvListBinding = oModel.bindList("/EnvData");
-                const oEnvContext = oEnvListBinding.create(envData);
-                await oEnvContext.created();
-                console.log("Environmental data created successfully");
-
-                // Refresh the model to ensure changes are reflected
-                await oModel.refresh();
-                console.log("Model refreshed");
-
-                MessageBox.success("Expense project created successfully", {
-                    onClose: () => {
-                        const oRouter = this.getOwnerComponent().getRouter();
-                        oRouter.navTo("RouteExpense-create");
+                    status: "Pending",
+                    submittedBy: "anonymous",
+                    submittedOn: formattedSubmittedOn,
+                    envData: {
+                        greenEnergyOutput: this.byId("greenEnergyOutput").getValue(),
+                        co2Current: this.byId("co2Current").getValue(),
+                        co2PostCompletion: this.byId("co2PostCompletion").getValue(),
+                        waterUsageCurrent: this.byId("waterUsageCurrent").getValue(),
+                        waterUsagePostCompletion: this.byId("waterUsagePostCompletion").getValue(),
+                        greenPayback: this.byId("greenPayback").getValue(),
+                        comments: this.byId("comments").getValue()
                     }
-                });
+                };
+
+                console.log("Payload:", payload);
+
+                const oExpensesBinding = oModel.bindList("/Expenses");
+                const oExpenseContext = oExpensesBinding.create(payload);
+
+                await oExpenseContext.created();
+
+                MessageBox.success("Expense created successfully.");
             } catch (error) {
                 console.error("Error creating expense:", error);
-                MessageBox.error("Error creating expense: " + (error.message || "Unknown error") + 
-                    "\nDetails: " + JSON.stringify(error, null, 2));
             } finally {
-                sap.ui.core.BusyIndicator.hide();
+                oViewModel.setProperty("/busy", false);
             }
         },
 
-        _validateForm: function() {
+        _loadReferenceData: async function () {
+            try {
+                const oModel = this.getOwnerComponent().getModel();
+
+                const [categoriesContexts, financingsContexts] = await Promise.all([
+                    oModel.bindList("/Categories").requestContexts(0, 100),
+                    oModel.bindList("/Financings").requestContexts(0, 100)
+                ]);
+
+                const aCategories = categoriesContexts.map(context => context.getObject());
+                const aFinancings = financingsContexts.map(context => context.getObject());
+
+                const oViewModel = this.getView().getModel("viewModel");
+                oViewModel.setProperty("/categories", aCategories);
+                oViewModel.setProperty("/financings", aFinancings);
+            } catch (error) {
+                console.error("Error loading reference data:", error);
+                MessageBox.error("Error loading reference data: " + error.message);
+            }
+        },
+
+        _validateForm: function () {
             const aFormFields = [
                 { id: "projectName", type: "input" },
                 { id: "projectManager", type: "input" },
@@ -174,7 +148,7 @@ sap.ui.define([
             return bValid;
         },
 
-        onNavBack: function() {
+        onNavBack: function () {
             window.location.href = "../../index.html";
         }
     });

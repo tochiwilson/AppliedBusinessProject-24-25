@@ -77,40 +77,73 @@ module.exports = cds.service.impl(async (srv) => {
             }
         };
 
-        const dataCache = {};
-        for (const [entity, { endpoint }] of Object.entries(entityConfig)) {
-            dataCache[entity] = await getData(endpoint);
-        }
+        srv.on('READ', 'Expenses', async (req) => {
+            try {
+                const expenses = await getData(entityConfig.Expenses.endpoint);
+                const relatedData = {
+                    Categories: await getData(entityConfig.Categories.endpoint).then(data =>
+                        data.map(entityConfig.Categories.map)
+                    ),
+                    Financings: await getData(entityConfig.Financings.endpoint).then(data =>
+                        data.map(entityConfig.Financings.map)
+                    ),
+                    EnvData: await getData(entityConfig.EnvData.endpoint).then(data =>
+                        data.map(entityConfig.EnvData.map)
+                    ),
+                };
 
-        const relatedData = {
-            Categories: dataCache.Categories.map(entityConfig.Categories.map),
-            Financings: dataCache.Financings.map(entityConfig.Financings.map),
-            EnvData: dataCache.EnvData.map(entityConfig.EnvData.map),
-        };
+                return expenses.map(expense => entityConfig.Expenses.map(expense, relatedData));
+            } catch (error) {
+                console.error('Error reading expenses:', error.message);
+                req.error(500, `Failed to fetch expenses: ${error.message}`);
+            }
+        });
 
-        for (const [entity, { map }] of Object.entries(entityConfig)) {
-            srv.on('READ', entity, async (req) => {
-                if (entity === 'Expenses') {
-                    return dataCache[entity].map(expense => map(expense, relatedData));
-                } else {
-                    return dataCache[entity].map(map);
-                }
-            });
-        }
+        srv.on('READ', 'Categories', async (req) => {
+            try {
+                const categories = await getData(entityConfig.Categories.endpoint);
+                return categories.map(entityConfig.Categories.map);
+            } catch (error) {
+                console.error('Error reading categories:', error.message);
+                req.error(500, `Failed to fetch categories: ${error.message}`);
+            }
+        });
+
+        srv.on('READ', 'Financings', async (req) => {
+            try {
+                const financings = await getData(entityConfig.Financings.endpoint);
+                return financings.map(entityConfig.Financings.map);
+            } catch (error) {
+                console.error('Error reading financings:', error.message);
+                req.error(500, `Failed to fetch financings: ${error.message}`);
+            }
+        });
+
+        srv.on('READ', 'EnvData', async (req) => {
+            try {
+                const envData = await getData(entityConfig.EnvData.endpoint);
+                return envData.map(entityConfig.EnvData.map);
+            } catch (error) {
+                console.error('Error reading envData:', error.message);
+                req.error(500, `Failed to fetch environmental data: ${error.message}`);
+            }
+        });
 
         srv.on('READ', 'ApprovedAmountsPerCategory', async (req) => {
             try {
-                const expenses = dataCache.Expenses;
-                const categories = dataCache.Categories;
+                const expenses = await getData(entityConfig.Expenses.endpoint);
+                const categories = await getData(entityConfig.Categories.endpoint).then(data =>
+                    data.map(entityConfig.Categories.map)
+                );
 
                 const approvedAmountsPerCategory = categories.map((category) => {
                     const totalAmount = expenses
-                        .filter(expense => expense.Status === 'Approved' && expense.CategoryId === category.CategoryId)
+                        .filter(expense => expense.Status === 'Approved' && expense.CategoryId === category.categoryId)
                         .reduce((sum, expense) => sum + Number(expense.Amount || 0), 0);
 
                     return {
-                        categoryId: category.CategoryId,
-                        categoryName: category.CategoryName,
+                        categoryId: category.categoryId,
+                        categoryName: category.categoryName,
                         totalApprovedAmount: totalAmount,
                     };
                 });
@@ -122,6 +155,80 @@ module.exports = cds.service.impl(async (srv) => {
             }
         });
 
+        srv.on('CREATE', 'Expenses', async (req) => {
+            const countResponse = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'GET',
+                    url: '/ExpenseSet/$count',
+                    headers: { 'Accept': 'application/json' }
+                }
+            );
+
+            const recordCount = parseInt(countResponse.data, 10);
+            const newId = recordCount + 1;
+
+            const expenseData = {
+                Mandt: '238',
+                ProjectName: req.data.projectName,
+                ProjectId: newId.toString(),
+                ExpenseId: newId.toString(),
+                ProjectManager: req.data.projectManager,
+                Amount: req.data.amount,
+                StartDate: req.data.startDate.split('T')[0].replace(/-/g, ''),
+                CategoryId: req.data.categoryId,
+                FinancingId: req.data.financingId,
+                DurationMonths: req.data.durationMonths,
+                Status: req.data.status,
+                SubmittedBy: req.data.submittedBy,
+                SubmittedOn: req.data.submittedOn.split('T')[0].replace(/-/g, '')
+            };
+
+            // Maak de Expense aan
+            const expenseResponse = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'POST',
+                    url: '/ExpenseSet',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    data: expenseData
+                }
+            );
+
+            // Voeg direct EnvData toe aan de aangemaakte Expense
+            const envData = {
+                ProjectId: newId.toString(),
+                ExpenseId: newId.toString(),
+                GreenEnergyOutput: req.data.envData.greenEnergyOutput || "0",
+                Co2Current: req.data.envData.co2Current || "0",
+                Co2PostCompletion: req.data.envData.co2PostCompletion || "0",
+                WaterUsageCurrent: req.data.envData.waterUsageCurrent || "0",
+                WaterUsagePostCompletion: req.data.envData.waterUsagePostCompletion || "0",
+                GreenPayback: req.data.envData.greenPayback || "0",
+                Comments: req.data.envData.comments || "No comments"
+            };
+
+            const envDataResponse = await httpclient.executeHttpRequest(
+                { destinationName: 'S4HANA_DEST' },
+                {
+                    method: 'POST',
+                    url: '/EnvDataSet',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    data: envData
+                }
+            );
+
+            return {
+                expense: expenseResponse.data,
+                envData: envDataResponse.data
+            };
+        });
     } catch (err) {
         console.error('Global service implementation error:', err.message);
         throw new Error('Service initialization failed.');
