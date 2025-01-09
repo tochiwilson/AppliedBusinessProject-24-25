@@ -5,8 +5,10 @@
     xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
     xmlns:mvc="sap.ui.core.mvc" 
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-        <content>
+    <Page id="page" 
+        title="{i18n>title}"
+        showNavButton="true"
+        navButtonPress=".onNavBack">        <content>
             <viz:VizFrame 
                 id="idPieChart" 
                 uiConfig="{applicationSet: 'fiori'}" 

@@ -44,6 +44,15 @@
                         press: function() {
                             window.location.href = "masterdata_management/webapp/";
                         }
+                    }).addStyleClass("sapUiTinyMargin"),
+
+                    new sap.m.StandardTile({
+                        icon: "sap-icon://pie-chart",
+                        title: "Analytics",
+                        info: "View expense analytics",
+                        press: function() {
+                            window.location.href = "expense-pie_chart/webapp/";
+                        }
                     }).addStyleClass("sapUiTinyMargin")
                 ]
             }).addStyleClass("sapUiMediumMarginTop");
@@ -69,3 +78,4 @@
 <body class="sapUiBody" id="content">
 </body>
 </html>
+    

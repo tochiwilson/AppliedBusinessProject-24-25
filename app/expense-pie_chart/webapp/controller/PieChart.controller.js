@@ -11,6 +11,10 @@ sap.ui.define([
             onInit: function () {
                 var oModel = this.getOwnerComponent().getModel();
                 this.getView().setModel(oModel);
+            },
+
+            onNavBack: function() {
+                window.location.href = "../../index.html";  // twee niveaus omhoog naar de root
             }
         });
     });
