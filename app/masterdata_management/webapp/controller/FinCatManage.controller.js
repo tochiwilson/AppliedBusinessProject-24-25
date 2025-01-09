@@ -12,7 +12,6 @@ sap.ui.define([
 
     return Controller.extend("masterdatamanagement.controller.FinCatManage", {
         onInit: function () {
-            // View model to manage UI states and properties
             const oViewModel = new JSONModel({
                 busy: false,
                 editMode: false,
@@ -22,10 +21,10 @@ sap.ui.define([
             this.getView().setModel(oViewModel, "viewModel");
         },
 
-        onCreate: function () {
+        onCreate: function (oEvent) {
             const sKey = this.byId("idIconTabBarNoIcons").getSelectedKey();
             const bIsCategory = sKey === "project_cat";
-
+            
             this._showDialog({
                 title: `Create ${bIsCategory ? 'Category' : 'Financing Type'}`,
                 type: bIsCategory ? 'category' : 'financing'
@@ -35,7 +34,7 @@ sap.ui.define([
         onEditPress: function (oEvent) {
             const oBindingContext = oEvent.getSource().getBindingContext();
             const oItem = oBindingContext.getObject();
-
+            
             this._showDialog({
                 title: "Edit Financing Type",
                 type: 'financing',
@@ -47,7 +46,7 @@ sap.ui.define([
         onEditCategoryPress: function (oEvent) {
             const oBindingContext = oEvent.getSource().getBindingContext();
             const oItem = oBindingContext.getObject();
-
+            
             this._showDialog({
                 title: "Edit Category",
                 type: 'category',
@@ -112,59 +111,56 @@ sap.ui.define([
             const [nameInput, descInput] = oDialog.getContent().filter(c => c.getValue);
             const sName = nameInput.getValue().trim();
             const sDescription = descInput.getValue().trim();
-
+        
             if (!sName || !sDescription) {
                 MessageBox.error("Please fill in all required fields");
                 return;
             }
+        
+            try {
+                const oModel = this.getOwnerComponent().getModel();
+                const sEntitySet = oConfig.type === 'category' ? 'Categories' : 'Financings';
+        
+                // Check for duplicates
+                const oList = oModel.bindList("/" + sEntitySet);
+                const aContexts = await oList.requestContexts();
+                const isDuplicate = aContexts.some(context => {
+                    const item = context.getObject();
+                    return item[oConfig.type + 'Name'].toLowerCase() === sName.toLowerCase() &&
+                           (!oConfig.edit || item[oConfig.type + 'Id'] !== oConfig.item?.[oConfig.type + 'Id']);
+                });
+        
+                if (isDuplicate) {
+                    MessageBox.error("An item with this name already exists");
+                    return;
+                }
+        
+                const oData = {
+                    [oConfig.type + 'Name']: sName,
+                    [oConfig.type + 'Description']: sDescription
+                };
 
-            if (oConfig.edit) {
-                this._updateEntity(oConfig, sName, sDescription);
-            } else {
-                this._createEntity(oConfig, sName, sDescription);
+                const sPath = oConfig.edit
+                    ? `/${sEntitySet}(${oConfig.item[oConfig.type + 'Id']})`
+                    : `/${sEntitySet}`;
+        
+                if (oConfig.edit) {
+                    // Call backend update handler
+                    await oModel.submitBatch(oModel.getUpdateGroupId());
+                    MessageBox.success("Item updated successfully");
+                } else {
+                    // Create new item
+                    const oListBinding = oModel.bindList("/" + sEntitySet);
+                    const oContext = oListBinding.create(oData);
+                    await oContext.created();
+                    MessageBox.success("Item created successfully");
+                }
+        
+                oDialog.close();
+        
+            } catch (error) {
+                console.error("Error:", error);
             }
-
-            oDialog.close();
-        },
-
-        _createEntity: function (oConfig, sName, sDescription) {
-            const oModel = this.getView().getModel();
-            const sEntitySet = oConfig.type === 'category' ? 'Categories' : 'Financings';
-
-            const oBindingContext = oModel.bindContext(`/${sEntitySet}`, null, {
-                $$updateGroupId: "createGroup"
-            });
-
-            oBindingContext.setParameter("data", {
-                [oConfig.type + "Name"]: sName,
-                [oConfig.type + "Description"]: sDescription
-            });
-
-            oModel.submitChanges({
-                groupId: "createGroup",
-                success: () => MessageBox.success("Item created successfully"),
-                error: (oError) => MessageBox.error("Error creating item: " + oError.message)
-            });
-        },
-
-        _updateEntity: function (oConfig, sName, sDescription) {
-            const oModel = this.getView().getModel();
-            const sEntitySet = oConfig.type === 'category' ? 'Categories' : 'Financings';
-
-            const oBindingContext = oModel.bindContext(`/${sEntitySet}(${oConfig.item[oConfig.type + 'Id']})`, null, {
-                $$updateGroupId: "updateGroup"
-            });
-
-            oBindingContext.setParameter("data", {
-                [oConfig.type + "Name"]: sName,
-                [oConfig.type + "Description"]: sDescription
-            });
-
-            oModel.submitChanges({
-                groupId: "updateGroup",
-                success: () => MessageBox.success("Item updated successfully"),
-                error: (oError) => MessageBox.error("Error updating item: " + oError.message)
-            });
         },
 
         onNavBack: function () {

@@ -8,39 +8,39 @@
         <IconTabBar id="idIconTabBarNoIcons" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
             <items>
                 <IconTabFilter text="Financing Types" key="fin_type">
-                    <Table id="financingManagement" items="{/Financings}">
+                    <Table id="financingManagementtt" items="{/Financings}">
                         <headerToolbar>
                             <Toolbar>
                                 <content>
                                     <Title text="Financing Types" level="H2"/>
                                     <ToolbarSpacer/>
-                                    <Button icon="sap-icon://add" text="{Create Financing}" press=".onCreate"/>
+                                    <Button icon="sap-icon://add" text="Create" press=".onCreate"/>
                                 </content>
                             </Toolbar>
                         </headerToolbar>
                         <columns>
                             <Column>
-                                <Text text="Name"/>
+                                <Text text="Name" />
                             </Column>
                             <Column>
-                                <Text text="Description"/>
+                                <Text text="Description" />
                             </Column>
                             <Column>
-                                <Text text="Actions"/>
+                                <Text text=" " />
+                            </Column>
+                            <Column>
+                                <Text text="Actions" />
                             </Column>
                         </columns>
                         <items>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="{financingName}"/>
-                                    <Text text="{financingDescription}"/>
+                                    <Text text="{financingName}" />
+                                    <Text text="{financingDescription}" />
+                                    <Text text=" " />
                                     <HBox>
-                                        <Button 
-                                            icon="sap-icon://edit" 
-                                            press=".onEditPress"/>
-                                        <Button 
-                                            icon="sap-icon://delete" 
-                                            press=".onDelete"/>
+                                        <Button icon="sap-icon://edit" text="Edit" press=".onEditPress" />
+                                        <Button icon="sap-icon://delete" text="Delete" press=".onDelete" />
                                     </HBox>
                                 </cells>
                             </ColumnListItem>
@@ -55,33 +55,33 @@
                                 <content>
                                     <Title text="Project Categories" level="H2"/>
                                     <ToolbarSpacer/>
-                                    <Button icon="sap-icon://add" text="{Create Category}" press=".onCreate"/>
+                                    <Button icon="sap-icon://add" text="Create" press=".onCreate"/>
                                 </content>
                             </Toolbar>
                         </headerToolbar>
                         <columns>
                             <Column>
-                                <Text text="Name"/>
+                                <Text text="Name" />
                             </Column>
                             <Column>
-                                <Text text="Description"/>
+                                <Text text="Description" />
                             </Column>
                             <Column>
-                                <Text text="Actions"/>
+                                <Text text=" " />
+                            </Column>
+                            <Column>
+                                <Text text="Actions" />
                             </Column>
                         </columns>
                         <items>
                             <ColumnListItem>
                                 <cells>
-                                    <Text text="{categoryName}"/>
-                                    <Text text="{categoryDescription}"/>
+                                    <Text text="{categoryName}" />
+                                    <Text text="{categoryDescription}" />
+                                    <Text text=" " />
                                     <HBox>
-                                        <Button 
-                                            icon="sap-icon://edit" 
-                                            press=".onEditCategoryPress"/>
-                                        <Button 
-                                            icon="sap-icon://delete" 
-                                            press=".onDelete"/>
+                                        <Button icon="sap-icon://edit" text="Edit" press=".onEditCategoryPress" />
+                                        <Button icon="sap-icon://delete" text="Delete" press=".onDelete" />
                                     </HBox>
                                 </cells>
                             </ColumnListItem>

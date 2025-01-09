@@ -276,7 +276,7 @@ module.exports = cds.service.impl(async (srv) => {
                 { destinationName: 'S4HANA_DEST' },
                 {
                     method: 'PUT',
-                    url: `/FinancingSet(Mandt='238',FinancingId=${req.data.financingId}'l)`,
+                    url: `/FinancingSet(Mandt='238',FinancingId=${req.data.financingId}')`,
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
